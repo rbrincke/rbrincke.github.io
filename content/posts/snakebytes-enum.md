@@ -3,7 +3,6 @@ title: "Snake bytes: Python's enum"
 date: 2022-11-14T20:04:36+01:00
 categories: ["Snakebytes"]
 tags: ["Python", "enum", "programming"]
-description: "Python enums."
 ---
 
 Python's enums tripped me up on my first encounter mostly because of the value assignment syntax.
