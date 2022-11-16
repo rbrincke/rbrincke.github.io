@@ -1,0 +1,135 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>Snake bytes: Python's take on scope - Technology Musings</title><meta name=Description content="Technology Musings"><meta property="og:title" content="Snake bytes: Python's take on scope"><meta property="og:description" content="Python&rsquo;s take on scopes is quite different from that in other languages."><meta property="og:type" content="article"><meta property="og:url" content="https://rbrincke.github.io/posts/snakebytes-scope/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-11-10T21:53:36+01:00"><meta property="article:modified_time" content="2022-11-10T21:53:36+01:00"><meta property="og:site_name" content="Technology Musings"><meta name=twitter:card content="summary"><meta name=twitter:title content="Snake bytes: Python's take on scope"><meta name=twitter:description content="Python&rsquo;s take on scopes is quite different from that in other languages."><meta name=application-name content="Technology Musings"><meta name=apple-mobile-web-app-title content="Technology Musings"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://rbrincke.github.io/posts/snakebytes-scope/><link rel=next href=https://rbrincke.github.io/posts/snakebytes-tuple/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Snake bytes: Python's take on scope","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/rbrincke.github.io\/posts\/snakebytes-scope\/"},"genre":"posts","keywords":"Python, scope, programming","wordcount":688,"url":"https:\/\/rbrincke.github.io\/posts\/snakebytes-scope\/","datePublished":"2022-11-10T21:53:36+01:00","dateModified":"2022-11-10T21:53:36+01:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"Robert ten Brincke"},"description":""}</script></head><body data-header-desktop=fixed data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="Technology Musings">Technology Musings</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>Posts </a><a class=menu-item href=/tags/>Tags </a><a class=menu-item href=/categories/>Categories </a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="Technology Musings">Technology Musings</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a href=javascript:void(0); class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></div></div></header><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Snake bytes: Python's take on scope</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>Robert ten Brincke</a></span>&nbsp;<span class=post-category>included in <a href=/categories/snakebytes/><i class="far fa-folder fa-fw" aria-hidden=true></i>Snakebytes</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2022-11-10>2022-11-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;688 words&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;4 minutes&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>Contents</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#python-scopes>Python scopes</a></li><li><a href=#implicit-declarations>Implicit declarations</a></li><li><a href=#declaration-ordering>Declaration ordering</a></li></ul></nav></div></div><div class=content id=content><p>Python&rsquo;s take on scopes is quite different from that in other languages.</p><p>Most programmers are familiar with block-scoped languages like C and Java. In such languages a block defines a new
+scope, usually defined using braces. Variables are generally resolved by starting in the current scope and
+traversing outwards.</p><p>Given that, the Python code below behaves exactly as you would expect it to.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>read</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>read</span><span class=p>()</span>  <span class=c1># 0</span>
+</span></span></code></pre></div><p>And even basic assignments look promising.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=n>x</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># 1</span>
+</span></span></code></pre></div><h2 id=python-scopes>Python scopes</h2><p>But Python actually uses Local-External-Global-Builtin (LEGB) scopes. The first scent of confusion arises when we
+attempt to modify a value from within a function.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>change</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=mi>10</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>change</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># 0</span>
+</span></span></code></pre></div><p>A function introduces a new scope. In <code>change</code>&rsquo;s scope, <code>x = 10</code> both declares a variable and assigns
+a value to it, whereas the outer scope remains untouched.</p><p>So why did it work for the <code>if</code>-statement? Because <code>if</code> does not actually introduce a new scope! This allows you to do
+things like define a new variable inside an <code>if</code>-statement that <em>seemingly</em> escapes its scope.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=n>x</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>message</span> <span class=o>=</span> <span class=s1>&#39;Zero&#39;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>message</span> <span class=o>=</span> <span class=s1>&#39;Not Zero&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>message</span><span class=p>)</span>  <span class=c1># &#39;Zero&#39;</span>
+</span></span></code></pre></div><p>In fact, this can lead to surprising behavior when variables are implicitly deleted, like for <code>except</code> (which deletes
+<code>e</code>).</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>e</span> <span class=o>=</span> <span class=s1>&#39;Excellent&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>raise</span> <span class=ne>RuntimeError</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=k>except</span> <span class=ne>RuntimeError</span> <span class=k>as</span> <span class=n>e</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>e</span><span class=p>)</span>  <span class=c1># NameError: name &#39;e&#39; is not defined.</span>
+</span></span></code></pre></div><h2 id=implicit-declarations>Implicit declarations</h2><p>Note the absence of keywords like <code>var</code>, <code>val</code>, <code>let</code> or an <code>:=</code> operator: variable declarations are implicit.
+That means Python must decide what you mean by <code>x = 10</code> - are you declaring a new variable and assigning the value
+10, or are you changing the value of an existing variable?</p><p>Our first examples and a familiarity with block scopes suggest the latter, but it is actually the former: <code>x = 10</code> means
+&lsquo;declare <code>x</code> and assign 10&rsquo; in scope where <code>x</code> is not found, but means &lsquo;reassign <code>x</code> to 10&rsquo; if <code>x</code> is present.</p><p>Other languages with implicit declarations
+<a href=https://www.oreilly.com/library/view/javascript-the-definitive/0596101996/ch04.html target=_blank rel="noopener noreffer">have different though no less confusing takes on this</a>.</p><p>If you wanted to change the value of an outer variable, you can do so by indicating that the scope of <code>x</code> should not
+be the default <code>local</code> scope.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>change_global</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>global</span> <span class=n>x</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=mi>10</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>change_global</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># 10</span>
+</span></span></code></pre></div><p>But <code>global</code> of course means global, not outer.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>change_in_function</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>  <span class=c1># Untouched.</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>change_global</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>        <span class=k>global</span> <span class=n>x</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=mi>10</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>change_global</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>change_in_function</span><span class=p>()</span>  <span class=c1># 0</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># 10</span>
+</span></span></code></pre></div><p>Changing the <code>x</code> in function requires <code>nonlocal</code>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>change_in_function</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>  <span class=c1># Untouched.</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>change_global</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>        <span class=k>nonlocal</span> <span class=n>x</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=mi>10</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>change_global</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>change_in_function</span><span class=p>()</span>  <span class=c1># 10</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># 0</span>
+</span></span></code></pre></div><p>But <code>nonlocal</code> does not work for <code>global</code> variables.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>change_in_function</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>change_global</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>        <span class=k>nonlocal</span> <span class=n>x</span>  <span class=c1># SyntaxError: no binding for nonlocal &#39;x&#39; found. </span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=mi>10</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>change_global</span><span class=p>()</span>
+</span></span></code></pre></div><h2 id=declaration-ordering>Declaration ordering</h2><p>Python scoping knows another curious twist: declarations further down in the code are considered in scope. Combine
+that with implicit declarations, and things become much harder to reason about.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>print_outer</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>read</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=mi>100</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>read</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>print_outer</span><span class=p>()</span>  <span class=c1># 100</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>print_outer</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>read</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>read</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=mi>100</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>print_outer</span><span class=p>()</span>  <span class=c1># NameError: free variable &#39;x&#39; referenced before assignment in enclosing scope.</span>
+</span></span></code></pre></div><p>In a longer block of code that inadvertently implicitly re-declares a variable many lines below the function
+that uses it, this is going to be hard to spot. It certainly is one reason to take the IDE&rsquo;s shadow warning much
+more seriously.</p><p>Compare this with the Kotlin code below (in which <code>x</code> is also mutable - not that this matters).</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>    <span class=k>var</span> <span class=py>x</span> <span class=p>=</span> <span class=m>42</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>fun</span> <span class=nf>print</span><span class=n>_outer</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>fun</span> <span class=nf>read</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>println</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>var</span> <span class=py>x</span> <span class=p>=</span> <span class=m>21</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>read</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>print_outer</span><span class=p>()</span>  <span class=err>#</span> <span class=m>42</span>
+</span></span></code></pre></div><p>While Python uses lexical scoping, this almost feels like a stretch of the term: when reading it from top to bottom it
+uses a variable <em>declared</em> after the function itself.</p><p>None of this is very obvious or intuitive for non-Pythonistas.</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2022-11-10</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://rbrincke.github.io/posts/snakebytes-scope/ data-title="Snake bytes: Python's take on scope" data-via=rhwtenbrincke data-hashtags=Python,scope,programming><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://rbrincke.github.io/posts/snakebytes-scope/ data-hashtag=Python><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Hacker News" data-sharer=hackernews data-url=https://rbrincke.github.io/posts/snakebytes-scope/ data-title="Snake bytes: Python's take on scope"><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://rbrincke.github.io/posts/snakebytes-scope/ data-title="Snake bytes: Python's take on scope"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="Share on 微博" data-sharer=weibo data-url=https://rbrincke.github.io/posts/snakebytes-scope/ data-title="Snake bytes: Python's take on scope"><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/python/>Python</a>,&nbsp;<a href=/tags/scope/>scope</a>,&nbsp;<a href=/tags/programming/>programming</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/posts/snakebytes-tuple/ class=next rel=next title="Snake bytes: Python's tuple syntax">Snake bytes: Python's tuple syntax<i class="fas fa-angle-right fa-fw" aria-hidden=true></i></a></div></div></article></div></main></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
