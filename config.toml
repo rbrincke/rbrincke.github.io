@@ -1,6 +1,6 @@
 baseURL = 'https://rbrincke.github.io'
 
-title = "Technology Musings"
+title = "Don't take my word for it, but..."
 theme = "LoveIt"
 
 languageCode = 'en-us'
@@ -10,14 +10,14 @@ languageName = "English"
   name = "Robert ten Brincke"
 
 [params]
-  title = "Technology Musings"
-  description = "Technology Musings"
+  title = "Don't take my word for it, but..."
+  description = "Don't take my word for it, but..."
 
   [params.header]
     desktopMode = "fixed"
     mobileMode = "auto"
     [params.header.title]
-      name = "Technology Musings"
+      name = "Don't take my word for it, but..."
 
   [params.social]
     GitHub = 'rbrincke'
@@ -33,7 +33,7 @@ languageName = "English"
       subtitle = ""
 
   [params.app]
-    title = 'Technology Musings'
+    title = "Don't take my word for it, but..."
 
 [menu]
   [[menu.main]]
