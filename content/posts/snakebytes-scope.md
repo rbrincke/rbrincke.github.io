@@ -210,7 +210,7 @@ Compare this with the Kotlin code below (in which `x` is also mutable - not that
         read()
     }
 
-    print_outer()  # 42
+    print_outer()  // 42
 ```
 
 While Python uses lexical scoping, this almost feels like a stretch of the term: when reading it from top to bottom it
