@@ -1,6 +1,7 @@
 ---
 title: "Snake bytes: Python's tuple syntax"
 date: 2022-11-12T19:21:02+01:00
+lastmod: 2022-11-17T07:57:45+01:00
 categories: ["Snakebytes"]
 tags: ["Python", "tuple", "programming"]
 ---
@@ -16,7 +17,7 @@ both parentheses and commas.
 tpl = ('chicken', 'egg', 42)
 
 for e in tpl:
-    print(e)  # 'chicken', 'egg'
+    print(e)  # 'chicken', 'egg', '42'
 ```
 
 At first glance it certainly _looks_ like we're invoking an unnamed function using parentheses, with the arguments
