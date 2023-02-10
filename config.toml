@@ -13,6 +13,16 @@ languageName = "English"
   title = "Don't take my word for it, but..."
   description = "Don't take my word for it, but..."
 
+  [params.page]
+    fontawesome = true
+    lightgallery = true
+
+    [params.page.math]
+      enable = true
+
+    [params.page.toc]
+      auto = false
+
   [params.header]
     desktopMode = "fixed"
     mobileMode = "auto"

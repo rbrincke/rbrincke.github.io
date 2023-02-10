@@ -1,0 +1,21 @@
+{{ $file := .Get "file" }}
+{{ $snippet := .Get "snippet" }}
+{{ $contents := os.ReadFile $file }}
+
+<!--Build the regexp.-->
+{{ $regexp := replace `(?s)\/\/\s*begin::name\n(.*)\/\/\s*end::name` "name" $snippet }}
+
+<!--Extract the snippet.-->
+{{ $codeGroups := findRESubmatch $regexp $contents 1 }}
+{{ $code := index (index $codeGroups 0) 1 }}
+
+<!--Find out the indentation from the first line.-->
+{{ $prefixWsGroups := findRESubmatch `(?s)(\s*)` $code 1 }}
+{{ $prefixWs := (index (index $prefixWsGroups 0) 1) }}
+
+<!--Print line by line, stripping indentation.-->
+```rust
+{{- range (split $code "\n") }}
+{{ safeHTML (strings.TrimPrefix $prefixWs .) -}}
+{{- end }}
+```
