@@ -1,5 +1,5 @@
 ---
-title: "Snake bytes: Python's enum"
+title: "Snake bytes: Python's tuple syntax"
 date: 2022-11-12T19:21:02+01:00
 categories: ["Snakebytes"]
 tags: ["Python", "tuple", "programming"]
