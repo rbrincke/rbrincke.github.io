@@ -1,23 +1,32 @@
 .toc {
   .toc-title {
+    text-align: right;
     font-size: var(--toc-title-font-size);
     font-weight: bold;
     text-transform: uppercase;
   }
 
   .toc-content {
+    text-align: right;
     font-size: var(--toc-content-font-size);
 
     ul {
+      direction: rtl;
       text-indent: -0.85rem;
-      padding-left: .8rem;
+      padding-right: .8rem;
       list-style: none;
+      line-height: 110%;
+
+      li {
+        padding-top: 8px;
+      }
 
       a:first-child::before {
         content: "|";
         font-weight: bolder;
-        margin-right: .5rem;
+        margin-left: .5rem;
         color: $single-link-color;
+        line-height: 10px;
 
         [theme=dark] & {
           color: $single-link-color-dark;
@@ -53,10 +62,10 @@
   width: 10000px;
   max-width: 0;
   padding: 0 .8rem;
-  border-left: 4px solid $global-border-color;
+  border-right: 4px solid $global-border-color;
   @include overflow-wrap(break-word);
   box-sizing: border-box;
-  top: 10rem;
+  top: 5.15rem;
   left: 0;
   visibility: hidden;
 
