@@ -1,7 +1,7 @@
 baseURL = 'https://rbrincke.github.io'
 
 title = "Robert ten Brincke"
-theme = "LoveIt"
+theme = "WriteIt"
 
 languageCode = 'en-us'
 languageName = "English"
@@ -17,7 +17,8 @@ languageName = "English"
     desktopMode = "fixed"
     mobileMode = "auto"
     [params.header.title]
-      name = "Home"
+      name = ""
+      pre = "<i class='fa-solid fa-house'></i>"
 
   [params.social]
     GitHub = 'rbrincke'
@@ -33,7 +34,7 @@ languageName = "English"
       subtitle = ""
 
   [params.app]
-    title = "Don't take my word for it, but..."
+    title = "Robert ten Brincke"
 
 [menu]
   [[menu.main]]
