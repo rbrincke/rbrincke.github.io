@@ -54,3 +54,5 @@ for e in tpl:
 ```
 
 In fact, the parentheses are entirely optional, except in the case of an empty tuple.
+
+{{< footnotes >}}

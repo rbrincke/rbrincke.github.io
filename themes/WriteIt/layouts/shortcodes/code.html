@@ -1,0 +1,35 @@
+{{ $path := .Get 0 }}
+{{ $name := .Get 1 }}
+{{ $contents := readFile (printf "/%s" $path) }}
+
+<!--Extract the snippet from the file.-->
+{{ $regexp := replace `(?s:.*)#.*\^BEGIN\sNAME\n([.\s\S]*)\n\s+#.*\^END\sNAME(?s:.*)` "NAME" $name }}
+{{ $snippet := replaceRE $regexp "$1" $contents }}
+
+<!--Snippets may be nested.-->
+<!--Replace any nested snippet indicators.-->
+{{ $snippet := replaceRE `(\s+#.*\^BEGIN\s.*)` "" $snippet }}
+{{ $snippet := replaceRE `(\s+#.*\^END\s.*)` "" $snippet }}
+
+<!--Find the common indentation to remove.-->
+{{ $whitespacePrefixCountPerLine := slice }}
+
+{{ $lines := split (trim $snippet "\n") "\n" }}
+{{ range $lines }}
+    {{ if (hasPrefix . " ") }}
+        {{ $whitespacePrefix := len (index (findRE `\s+` .) 0) }}
+        {{ $whitespacePrefixCountPerLine = $whitespacePrefixCountPerLine | append $whitespacePrefix }}
+    {{ else }}
+        {{ $whitespacePrefixCountPerLine = $whitespacePrefixCountPerLine | append 0 }}
+    {{ end }}
+{{ end }}
+
+{{ $whitespaceCountToRemove := index (sort $whitespacePrefixCountPerLine) 0 }}
+{{ $removePrefix := (" " | strings.Repeat $whitespaceCountToRemove) }}
+
+<!--Print without common indentation.-->
+```python
+{{- range $lines }}
+{{ safeHTML (strings.TrimPrefix $removePrefix .) -}}
+{{- end }}
+```
