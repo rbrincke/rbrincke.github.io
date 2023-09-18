@@ -6,6 +6,9 @@ theme = "WriteIt"
 languageCode = 'en-us'
 languageName = "English"
 
+googleAnalytics = "G-7TXFKR94LH"
+enableRobotsTXT = true
+
 [author]
   name = "Robert ten Brincke"
 
@@ -35,6 +38,11 @@ languageName = "English"
 
   [params.app]
     title = "Robert ten Brincke"
+
+  [params.analytics]
+    enable = true
+      [params.analytics.google]
+      id = "G-7TXFKR94LH"
 
 [menu]
   [[menu.main]]
