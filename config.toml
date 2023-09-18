@@ -43,6 +43,7 @@ enableRobotsTXT = true
     enable = true
       [params.analytics.google]
       id = "G-7TXFKR94LH"
+      anonymizeIP = true
 
 [menu]
   [[menu.main]]
