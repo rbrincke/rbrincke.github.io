@@ -27,31 +27,40 @@ Nontransitive dice were popularized by Martin Gardner in his Scientific American
 
 #### A naive arrangement
 
-For the sake of illustration, consider a naive arrangement of the labels in ascending order: die A gets labels 1 through 6, die B gets labels 7 through 12, and die C gets labels 13 through 18. A six-by-six grid that pitches each outcome against each other outcome between dice A and B looks as follows, where each cell indicates which die wins the throw.
+For the sake of illustration, consider a naive arrangement of the labels in which every 3rd number is assigned: die A gets labels (3, 6, 9, 12, 15, 18), die B gets labels (2, 5, 8, 11, 14, 17), and die C gets labels (1, 4, 7, 10, 13, 16). A six-by-six grid that pitches each outcome against each other outcome between dice A and B looks as follows, where each cell indicates whether die A wins the throw with a 1.
 
-In this naive arrangement, die B wins 36/36 times, or with a probability of 1. A grid pitching C against B would show that C always beats B, likewise C always beats A. C is preferred over B, and B is preferred over A. In more formal notation, $A \succ B \succ C$.
+| &#x2193; B  \  A &#x2192; | 3 | 6 | 9 | 12 | 15 | 18 |
+|:-------------------------:|:-:|:-:|:-:|:--:|:--:|:--:|
+|             2             | 1 | 1 | 1 | 1  | 1  | 1  |
+|             5             | 0 | 1 | 1 | 1  | 1  | 1  |
+|             8             | 0 | 0 | 1 | 1  | 1  | 1  |
+|            11             | 0 | 0 | 0 | 1  | 1  | 1  |
+|            14             | 0 | 0 | 0 | 0  | 1  | 1  |
+|            17             | 0 | 0 | 0 | 0  | 0  | 1  |
 
-Clearly this is not a good way for Warren to arrange the labels because Bill, who gets first choice, would simply pick die C.
+In this naive arrangement, die A beats B in 21 out of 36 cases, which is more than half. A similar grid pitching B against C would show that B also beats C in 21 out of 36 cases, and that A beats C in 21 out of 36 cases too. A is preferred over B, and B is preferred over C, and the transitive property that A is also preferred over C holds. In more formal notation, $A \succ B \succ C$. No die beats die A.
+
+Clearly this is not a good way for Warren to arrange the labels because Bill, who gets first choice, would simply pick die A.
 
 #### An optimal arrangement
 
 Warren's advantage hinges on an arrangement such that whatever die Bill picks, there is always a die that can beat it.
 
-Such a property may colloquially be referred to as a Rock-Paper-Scissors property. For Rock-Paper-Scissors, Paper beats Rock, Scissors beats Paper, and Rock beats Scissors. Regardless of the choice, there exists another choice that beats it. Mathematicians refer to such a property as non-transitive or intransitive.
+Such a property may colloquially be referred to as a Rock-Paper-Scissors property. For Rock-Paper-Scissors, Paper beats Rock, Scissors beats Paper, and Rock beats Scissors. Regardless of the choice, there exists another choice that beats it. In other words, $A \succ B \succ C \succ A$. Mathematicians refer to such a property as non-transitive or intransitive.
 
-This is seemingly paradoxical, so it may come as a surprise that not only do such arrangements exist, there are in fact 10,705 of them. The top twenty optimal arrangements are shown here.{{< sidenote >}}The above solution is found through enumeration. Note that despite the approach below, this only works for comparatively small problems.
+This is seemingly paradoxical, so it may come as a surprise that not only do such arrangements exist for our dice, there are in fact 10,705 of them. The top twenty optimal arrangements are shown here.{{< sidenote >}}The above solution is found through enumeration. Note that despite the approach below, this only works for comparatively small problems.
 \
 \
 At first glance it may be tempting to take the 18 labels, create all possible permutations, and assign positions 1 through 6 to group/die A, 6 through 12 to B, and the remainder to C. Note however that 18! (factorial) such permutations exist, a huge number. Such a strategy generates many duplicate solutions where the label order within a group differs.
 \
 \
-It is sufficient to enumerate the number of possible groupings, known as combinations. The number of unique possible arrangements equals ${18 \choose 6} {12 \choose 6} {6 \choose 6}$, or 17,153,136. To generate this, create an array of size 18 with six entries of 0, 1 and 2 each. These represent group/die assignments. This set contains duplicate entries, and is referred to as a multiset, which can be permutated efficiently using specialized algorithms, in this case using Aaron Williams' _Loopless generation of multiset permutations using a constant number of variables by prefix shifts_ (2008, SODA '09 Proceedings of the 20th annual ACM-SIAM symposium on Discrete algorithms, 987-996.). By using each permutation as an overlay/mask for the labels, each possible grouping is generated without regard for the group-internal label order.
+It is sufficient to enumerate the number of possible groupings, known as combinations. The number of unique possible arrangements equals ${18 \choose 6} {12 \choose 6} {6 \choose 6}$, or 17,153,136. To generate this, create an array of size 18 with six entries of 0, 1 and 2 each. These represent group/die assignments. This set contains duplicate entries, and is referred to as a multiset, which can be permutated efficiently using specialized algorithms, in this case using Aaron Williams' _Loopless generation of multiset permutations using a constant number of variables by prefix shifts_ (2008, SODA '09 Proceedings of the 20th annual ACM-SIAM symposium on Discrete algorithms, 987-996.). By using each multiset permutation as an overlay/mask for the labels, each possible grouping is generated without regard for the group-internal label order.
 \
 \
 The number of solutions can be further reduced by a factor of three. A solution $A \succ B \succ C \succ A$ is equivalent to one where the labels are shifted by one or two positions (such that B takes the place of A, etcetera). To prevent this, anchor the first element to always be in group/die A. This leaves 5,717,712 possible solutions to be evaluated.
 \
 \
-Code to produce these solutions is found [here](https://github.com/rbrincke/nontransitive-dice).{{< /sidenote >}}
+Code to produce these solutions is found [in this GitHub repository](https://github.com/rbrincke/nontransitive-dice).{{< /sidenote >}}
 
 |    | A                     | B                   | C                    | $P(A>B)$ | $P(B>C)$ | $P(C>A)$ |
 |----|-----------------------|---------------------|----------------------|----------|----------|----------|
