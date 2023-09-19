@@ -48,7 +48,7 @@ Warren's advantage hinges on an arrangement such that whatever die Bill picks, t
 
 Such a property may colloquially be referred to as a Rock-Paper-Scissors property. For Rock-Paper-Scissors, Paper beats Rock, Scissors beats Paper, and Rock beats Scissors. Regardless of the choice, there exists another choice that beats it. In other words, $A \succ B \succ C \succ A$. Mathematicians refer to such a property as non-transitive or intransitive.
 
-This is seemingly paradoxical, so it may come as a surprise that not only do such arrangements exist for our dice, there are in fact 10,705 of them. The top twenty optimal arrangements are shown here.{{< sidenote >}}The above solution is found through enumeration. Note that despite the approach below, this only works for comparatively small problems.
+This is seemingly paradoxical, so it may come as a surprise that not only do such arrangements exist for our dice, there seem to be 10,705 of them. The top twenty optimal arrangements are shown here.{{< sidenote >}}The solutions are found through enumeration. Note that despite the approach below, this only works for comparatively small problems.
 \
 \
 At first glance it may be tempting to take the 18 labels, create all possible permutations, and assign positions 1 through 6 to group/die A, 6 through 12 to B, and the remainder to C. Note however that 18! (factorial) such permutations exist, a huge number. Such a strategy generates many duplicate solutions where the label order within a group differs.
@@ -64,30 +64,30 @@ Code to produce these solutions is found [in this GitHub repository](https://git
 
 |    | A                     | B                   | C                    | $P(A>B)$ | $P(B>C)$ | $P(C>A)$ |
 |----|-----------------------|---------------------|----------------------|----------|----------|----------|
-| 1  | 1, 10, 11, 12, 13, 14 | 5, 6, 7, 8, 9, 18   | 2, 3, 4, 15, 16, 17  | 0.6945   | 0.5834   | 0.5834   |
-| 2  | 1, 9, 11, 12, 13, 14  | 5, 6, 7, 8, 10, 18  | 2, 3, 4, 15, 16, 17  | 0.6667   | 0.5834   | 0.5834   |
-| 3  | 1, 8, 11, 12, 13, 14  | 5, 6, 7, 9, 10, 18  | 2, 3, 4, 15, 16, 17  | 0.6389   | 0.5834   | 0.5834   |
-| 4  | 1, 9, 10, 12, 13, 14  | 5, 6, 7, 8, 11, 18  | 2, 3, 4, 15, 16, 17  | 0.6389   | 0.5834   | 0.5834   |
-| 5  | 1, 7, 11, 12, 13, 14  | 5, 6, 8, 9, 10, 18  | 2, 3, 4, 15, 16, 17  | 0.6112   | 0.5834   | 0.5834   |
-| 6  | 1, 8, 10, 12, 13, 14  | 5, 6, 7, 9, 11, 18  | 2, 3, 4, 15, 16, 17  | 0.6112   | 0.5834   | 0.5834   |
-| 7  | 1, 9, 10, 11, 13, 14  | 5, 6, 7, 8, 12, 18  | 2, 3, 4, 15, 16, 17  | 0.6112   | 0.5834   | 0.5834   |
-| 8  | 1, 6, 7, 8, 17, 18    | 3, 4, 5, 14, 15, 16 | 2, 9, 10, 11, 12, 13 | 0.5834   | 0.5834   | 0.5834   |
-| 9  | 1, 2, 11, 12, 13, 18  | 6, 7, 8, 9, 10, 17  | 3, 4, 5, 14, 15, 16  | 0.5834   | 0.5834   | 0.5834   |
-| 10 | 1, 6, 11, 12, 13, 14  | 5, 7, 8, 9, 10, 18  | 2, 3, 4, 15, 16, 17  | 0.5834   | 0.5834   | 0.5834   |
-| 11 | 1, 7, 10, 12, 13, 14  | 5, 6, 8, 9, 11, 18  | 2, 3, 4, 15, 16, 17  | 0.5834   | 0.5834   | 0.5834   |
-| 12 | 1, 8, 9, 12, 13, 14   | 5, 6, 7, 10, 11, 18 | 2, 3, 4, 15, 16, 17  | 0.5834   | 0.5834   | 0.5834   |
-| 13 | 1, 8, 10, 11, 13, 14  | 5, 6, 7, 9, 12, 18  | 2, 3, 4, 15, 16, 17  | 0.5834   | 0.5834   | 0.5834   |
-| 14 | 1, 9, 10, 11, 12, 14  | 5, 6, 7, 8, 13, 18  | 2, 3, 4, 15, 16, 17  | 0.5834   | 0.5834   | 0.5834   |
-| 15 | 1, 2, 9, 14, 15, 16   | 6, 7, 8, 11, 12, 13 | 3, 4, 5, 10, 17, 18  | 0.5834   | 0.5834   | 0.5834   |
-| 16 | 1, 8, 9, 10, 11, 12   | 4, 5, 6, 7, 17, 18  | 2, 3, 13, 14, 15, 16 | 0.5556   | 0.5556   | 0.7223   |
-| 17 | 1, 2, 12, 13, 14, 15  | 7, 8, 9, 10, 11, 18 | 3, 4, 5, 6, 16, 17   | 0.5556   | 0.7223   | 0.5556   |
-| 18 | 1, 8, 9, 10, 11, 13   | 4, 5, 6, 7, 17, 18  | 2, 3, 12, 14, 15, 16 | 0.5556   | 0.5556   | 0.6945   |
-| 19 | 1, 2, 12, 13, 14, 15  | 6, 8, 9, 10, 11, 18 | 3, 4, 5, 7, 16, 17   | 0.5556   | 0.6945   | 0.5556   |
-| 20 | 1, 10, 11, 12, 13, 15 | 4, 6, 7, 8, 9, 18   | 2, 3, 5, 14, 16, 17  | 0.6945   | 0.5556   | 0.5556   |
+| 1  | 1, 10, 11, 12, 13, 14 | 5, 6, 7, 8, 9, 18   | 2, 3, 4, 15, 16, 17  | 0.6944   | 0.5833   | 0.5833   |
+| 2  | 1, 9, 11, 12, 13, 14  | 5, 6, 7, 8, 10, 18  | 2, 3, 4, 15, 16, 17  | 0.6667   | 0.5833   | 0.5833   |
+| 3  | 1, 8, 11, 12, 13, 14  | 5, 6, 7, 9, 10, 18  | 2, 3, 4, 15, 16, 17  | 0.6389   | 0.5833   | 0.5833   |
+| 4  | 1, 9, 10, 12, 13, 14  | 5, 6, 7, 8, 11, 18  | 2, 3, 4, 15, 16, 17  | 0.6389   | 0.5833   | 0.5833   |
+| 5  | 1, 7, 11, 12, 13, 14  | 5, 6, 8, 9, 10, 18  | 2, 3, 4, 15, 16, 17  | 0.6111   | 0.5833   | 0.5833   |
+| 6  | 1, 8, 10, 12, 13, 14  | 5, 6, 7, 9, 11, 18  | 2, 3, 4, 15, 16, 17  | 0.6111   | 0.5833   | 0.5833   |
+| 7  | 1, 9, 10, 11, 13, 14  | 5, 6, 7, 8, 12, 18  | 2, 3, 4, 15, 16, 17  | 0.6111   | 0.5833   | 0.5833   |
+| 8  | 1, 6, 7, 8, 17, 18    | 3, 4, 5, 14, 15, 16 | 2, 9, 10, 11, 12, 13 | 0.5833   | 0.5833   | 0.5833   |
+| 9  | 1, 2, 11, 12, 13, 18  | 6, 7, 8, 9, 10, 17  | 3, 4, 5, 14, 15, 16  | 0.5833   | 0.5833   | 0.5833   |
+| 10 | 1, 6, 11, 12, 13, 14  | 5, 7, 8, 9, 10, 18  | 2, 3, 4, 15, 16, 17  | 0.5833   | 0.5833   | 0.5833   |
+| 11 | 1, 7, 10, 12, 13, 14  | 5, 6, 8, 9, 11, 18  | 2, 3, 4, 15, 16, 17  | 0.5833   | 0.5833   | 0.5833   |
+| 12 | 1, 8, 9, 12, 13, 14   | 5, 6, 7, 10, 11, 18 | 2, 3, 4, 15, 16, 17  | 0.5833   | 0.5833   | 0.5833   |
+| 13 | 1, 8, 10, 11, 13, 14  | 5, 6, 7, 9, 12, 18  | 2, 3, 4, 15, 16, 17  | 0.5833   | 0.5833   | 0.5833   |
+| 14 | 1, 9, 10, 11, 12, 14  | 5, 6, 7, 8, 13, 18  | 2, 3, 4, 15, 16, 17  | 0.5833   | 0.5833   | 0.5833   |
+| 15 | 1, 2, 9, 14, 15, 16   | 6, 7, 8, 11, 12, 13 | 3, 4, 5, 10, 17, 18  | 0.5833   | 0.5833   | 0.5833   |
+| 16 | 1, 8, 9, 10, 11, 12   | 4, 5, 6, 7, 17, 18  | 2, 3, 13, 14, 15, 16 | 0.5556   | 0.5556   | 0.7222   |
+| 17 | 1, 2, 12, 13, 14, 15  | 7, 8, 9, 10, 11, 18 | 3, 4, 5, 6, 16, 17   | 0.5556   | 0.7222   | 0.5556   |
+| 18 | 1, 8, 9, 10, 11, 13   | 4, 5, 6, 7, 17, 18  | 2, 3, 12, 14, 15, 16 | 0.5556   | 0.5556   | 0.6944   |
+| 19 | 1, 2, 12, 13, 14, 15  | 6, 8, 9, 10, 11, 18 | 3, 4, 5, 7, 16, 17   | 0.5556   | 0.6944   | 0.5556   |
+| 20 | 1, 10, 11, 12, 13, 15 | 4, 6, 7, 8, 9, 18   | 2, 3, 5, 14, 16, 17  | 0.6944   | 0.5556   | 0.5556   |
 
 Even though any non-transitive set gives Warren an advantage, some non-transitive sets are preferable over others.
 
-Consider first that Bill is likely aware of the crux of the problem, and will pick the die that gives Warren the least advantage. Warren therefore prefers solutions that ensure that the least dominant of the three pairs – the lowest of the three values – is as high as possible. For the top fifteen solutions this probability equals 21/36, or 0.5834. Observe how solution 16 has a lower probability.
+Consider first that Bill is likely aware of the crux of the problem, and will pick the die that gives Warren the least advantage. Warren therefore prefers solutions that ensure that the least dominant of the three pairs – the lowest of the three values – is as high as possible. For the top fifteen solutions this probability equals 21/36, or 0.5833. Observe how solution 16 has a lower probability.
 
 Consider also that Bill may assume Warren's edge is the same regardless of which die he chooses. Note that the top 7 solutions include one die that is dominated to a much larger extent. Bill may inadvertently choose this die, so it is in Warren's interest for this wildcard choice to be as advantageous as possible.
 
