@@ -16,6 +16,9 @@ enableRobotsTXT = true
   title = "Robert ten Brincke"
   description = "Robert ten Brincke"
 
+  [params.page.math]
+    enable = true
+
   [params.header]
     desktopMode = "fixed"
     mobileMode = "auto"
