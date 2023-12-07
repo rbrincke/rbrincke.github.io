@@ -1,0 +1,17 @@
+$global-font-size: 16px;
+$global-font-weight: 250;
+$global-line-height: 1.25rem;
+
+// Make LaTeX content fit in with the rest of the text.
+.katex {
+    font: inherit !important;
+}
+
+// Interferes with image width.
+.single .content figure img {
+    width: auto !important;
+}
+
+.single .content figure {
+    margin: 1.75em !important;
+}
