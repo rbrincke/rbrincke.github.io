@@ -15,8 +15,6 @@ Python has been around for a long time, long enough for best practices and tooli
 
 We'll focus on a setup that works well from PyCharm, supports running tests from the command line, and allows us to use code in other projects.
 
-The remainder of this write-up assumes a clean Git repository as a starting point.
-
 ## Virtual environments
 
 You may have multiple Python projects using different dependencies and different versions of the same dependencies. Python supports the creation of virtual environments (venv) that allows you to keep these environments separate.
@@ -31,9 +29,9 @@ Before you do install anything into it, activate it using `source venv/bin/activ
 
 ## Directory structure
 
-Lots of people say not to put your source code in a `/src` directory, but to put it in a folder named after the project. I actually find that using `/src` works very well and provides a clear and consistent directory structure. Within it is a single directory that contains the code.
+Lots of people say not to put your source code in a `/src` directory, but to put it in a folder named after the project. I actually find that using `/src` works very well and provides a clear and consistent directory structure. Inside `/src` is often a single directory that contains the code.
 
-Our setup also makes use a `/tests` directory containing an `/integration` and `/unit` subdirectory. Later on this allows us to easily run either unit tests, integration tests, or all tests.
+Our setup also makes use of a `/tests` directory containing an `/integration` and `/unit` subdirectory. Later, this separation allows us to easily run either unit tests, integration tests, or all tests.
 
 ```markdown
 ├── src
@@ -49,10 +47,11 @@ Our setup also makes use a `/tests` directory containing an `/integration` and `
 │   │   ├── test_code.py
 ├── venv
 ├── pyproject.toml
+├── requirements.txt
 └── .gitignore
 ```
 
-The build is described in `pyproject.toml` -- it effectively replaces the legacy `setup.py` that lots of posts talk about. Our configuration makes use of [setuptools](https://setuptools.pypa.io/en/latest/#), but other tools like poetry would work well too.
+The build is described in `pyproject.toml` -- it effectively replaces the legacy `setup.py`. Our configuration makes use of [setuptools](https://setuptools.pypa.io/en/latest/#), but other tools like poetry would work well too.
 
 ```toml
 [build-system]
@@ -67,19 +66,24 @@ authors = [
 version = "0.1"
 description = "Project description."
 requires-python = ">=3.11"
-dependencies = []
+dynamic = ["dependencies"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
 ```
+
+It is possible to list dependencies directly, but we have chosen to make them dynamic by means of `requirements.txt`. Using `requirements.txt` to manage the project's dependencies means the setup plays nice with IDEs such as PyCharm, which will detect missing entries and point out version inconsistencies.
 
 ## PyCharm
 
 We're going to want this to work well in an IDE too, our tool of choice is PyCharm Community.
 
-Open PyCharm, click `File » Open`, navigate to the directory containing your Git repository (click the entire folder), and open it. PyCharm should automatically detect your virtual environment, shown at the bottom right. If it does not, you can change it manually by clicking it and selecting `venv/bin/python3` from your virtual environment.
+Open PyCharm, click `File » Open`, navigate into the directory containing your Git repository, and open it. PyCharm should automatically detect your virtual environment, shown at the bottom right (it'll say something like `Python 3.11 (projectname)`). If it does not, you can change it manually by clicking it and selecting your local virtual environment.
 
-For tests and imports to work well, PyCharm needs to be told where the key parts of the code are. Mark (right-click the folder `» Mark Directory As`) the `/src` directory as the `Source Root` (blue) and the `/tests` directory as the `Test Sources Root` (green).
+For tests and imports to work well, PyCharm needs to be told where the key parts of the code are. Mark the `/src` directory (right-click the folder `» Mark Directory As`) as the `Source Root` (blue) and the `/tests` directory as the `Test Sources Root` (green).
 
 At this point you should be able to run unit tests directly from the IDE and imports should work as expected.
 
@@ -94,7 +98,7 @@ source venv/bin/activate
 pip install -U pytest
 ```
 
-If you try to run the tests now, you'll end up with import errors. To fix this, perform an [editable installation](https://setuptools.pypa.io/en/latest/userguide/development_mode.html) of your project.
+If you try to run the tests from the command line now, you'll end up with import errors. To fix this, perform an [editable installation](https://setuptools.pypa.io/en/latest/userguide/development_mode.html) of your project.
 
 ```commandline
 pip install --editable .
