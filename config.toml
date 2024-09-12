@@ -19,6 +19,16 @@ enableRobotsTXT = true
   [params.page.math]
     enable = true
 
+  [params.page]
+    fontawesome = true
+    lightgallery = true
+
+    [params.page.math]
+      enable = true
+
+    [params.page.toc]
+      auto = false
+
   [params.header]
     desktopMode = "fixed"
     mobileMode = "auto"
