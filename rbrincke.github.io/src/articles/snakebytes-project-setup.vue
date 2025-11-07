@@ -1,5 +1,5 @@
 <template>
-    <div class="col-8">
+    <div class="col-sm-12 col-md-8">
         <h1 class="title">Snakebytes: Project Setup</h1>
         <div class="meta">
             <font-awesome-icon :icon="['fas', 'calendar-alt']" /> <time datetime="2023-07-05">2023-07-05</time> in <a
