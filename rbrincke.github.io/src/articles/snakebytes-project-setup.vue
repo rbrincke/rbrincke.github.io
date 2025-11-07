@@ -2,7 +2,8 @@
     <div class="col-8">
         <h1 class="title">Snakebytes: Project Setup</h1>
         <div class="meta">
-            <time datetime="2023-07-05">2023-07-05</time> in <a href="/">Snakebytes</a>
+            <font-awesome-icon :icon="['fas', 'calendar-alt']" /> <time datetime="2023-07-05">2023-07-05</time> in <a
+                href="/">Snakebytes</a>
         </div>
 
         <p>
@@ -36,40 +37,43 @@
 
         <p>In the root of your Git repository, create a new virtual environment:</p>
 
-        <pre class="code-block"><code>
-python -m venv venv
-        </code></pre>
+        <code-block language="sh">
+            python -m venv venv
+        </code-block>
 
         <p>Before you do install anything into it, activate it using <code>source venv/bin/activate</code>.</p>
 
         <h2>Directory structure</h2>
 
-        <p>Lots of people say not to put your source code in a /src directory, but to put it in a folder named after the
-            project. I actually find that using /src works very well and provides a clear and consistent directory
-            structure. Inside /src is often a single directory that contains the code.</p>
+        <p>Lots of people say not to put your source code in a <code>/src</code> directory, but to put it in a folder
+            named after the
+            project. I actually find that using <code>/src</code> works very well and provides a clear and consistent
+            directory
+            structure. Inside <code>/src</code> is often a single directory that contains the code.</p>
 
-        <p>Our setup also makes use of a <code>/tests</code> directory containing an /integration and /unit
+        <p>Our setup also makes use of a <code>/tests</code> directory containing an <code>/integration</code> and
+            <code>/unit</code>
             subdirectory. Later, this separation allows us to easily run either unit tests, integration tests, or all
             tests.
         </p>
 
-        <pre class="code-block"><code>
-├── src
-│   ├── projectname
-│   │   ├── __init__.py
-│   │   ├── code.py
-├── tests
-│   ├── integration
-│   │   ├── __init__.py
-│   │   ├── test_code.py
-│   ├── unit
-│   │   ├── __init__.py
-│   │   ├── test_code.py
-├── venv
-├── pyproject.toml
-├── requirements.txt
-└── .gitignore
-        </code></pre>
+        <code-block language="plaintext">
+            ├── src
+            │ ├── projectname
+            │ │ ├── __init__.py
+            │ │ ├── code.py
+            ├── tests
+            │ ├── integration
+            │ │ ├── __init__.py
+            │ │ ├── test_code.py
+            │ ├── unit
+            │ │ ├── __init__.py
+            │ │ ├── test_code.py
+            ├── venv
+            ├── pyproject.toml
+            ├── requirements.txt
+            └── .gitignore
+        </code-block>
 
         <p>
             The build is described in <code>pyproject.toml</code> - it effectively replaces the legacy
@@ -78,27 +82,27 @@ python -m venv venv
             well too.
         </p>
 
-        <pre class="code-block"><code>
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+        <code-block language="toml">
+            [build-system]
+            requires = ["setuptools"]
+            build-backend = "setuptools.build_meta"
 
-[project]
-name = "projectname"
-authors = [
-    {name = "Code Author", email = "author@codeauthor.com"},
-]
-version = "0.1"
-description = "Project description."
-requires-python = ">=3.11"
-dynamic = ["dependencies"]
+            [project]
+            name = "projectname"
+            authors = [
+                {name = "Code Author", email = "author@codeauthor.com"},
+            ]
+            version = "0.1"
+            description = "Project description."
+            requires-python = ">=3.11"
+            dynamic = ["dependencies"]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+            [tool.setuptools.packages.find]
+            where = ["src"]
 
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
-        </code></pre>
+            [tool.setuptools.dynamic]
+            dependencies = {file = ["requirements.txt"]}
+        </code-block>
 
         <p>
             It is possible to list dependencies directly, but we have chosen to make them dynamic by means of
@@ -114,16 +118,19 @@ dependencies = {file = ["requirements.txt"]}
         </p>
 
         <p>
-            Open PyCharm, click File » Open, navigate into the directory containing your Git repository, and open it.
+            Open PyCharm, click <code>File » Open</code>, navigate into the directory containing your Git repository,
+            and open it.
             PyCharm should automatically detect your virtual environment, shown at the bottom right (it'll say something
-            like Python 3.11 (projectname)). If it does not, you can change it manually by clicking it and selecting
+            like <code>Python 3.11 (projectname)</code>). If it does not, you can change it manually by clicking it and
+            selecting
             your local virtual environment.
         </p>
 
         <p>
             For tests and imports to work well, PyCharm needs to be told where the key parts of the code are. Mark the
-            /src directory (right-click the folder » Mark Directory As) as the Source Root (blue) and the /tests
-            directory as the Test Sources Root (green).
+            <code>/src</code> directory (right-click the folder <code>» Mark Directory As</code>) as the
+            <code>Source Root</code> (blue) and the <code>/tests</code>
+            directory as the <code>Test Sources Root</code> (green).
         </p>
 
         <p>
@@ -142,60 +149,72 @@ dependencies = {file = ["requirements.txt"]}
             Activate the virtual environment and install it.
         </p>
 
-        <pre class="code-block"><code>
-source venv/bin/activate
-pip install -U pytest
-        </code></pre>
+        <code-block language="sh">
+            source venv/bin/activate
+            pip install -U pytest
+        </code-block>
 
         <p>
             If you try to run the tests from the command line now, you'll end up with import errors. To fix this,
             perform an editable installation of your project.
         </p>
 
-        <pre class="code-block"><code>
-pip install --editable .
-        </code></pre>
+        <code-block language="sh">
+            pip install --editable .
+        </code-block>
 
         <p>You can now run the tests in three different ways:</p>
 
         <ul>
-            <li>pytest tests/unit to run the unit tests</li>
-            <li>pytest tests/integration to run the integration tests</li>
-            <li>pytest tests to run all tests</li>
+            <li><code>pytest tests/unit</code> to run the unit tests</li>
+            <li><code>pytest tests/integration</code> to run the integration tests</li>
+            <li><code>pytest tests</code> to run all tests</li>
         </ul>
 
         <h2>Bonus: Using your code in other projects</h2>
 
         <p>Because this is a proper project, it is easy to use this code from other projects.</p>
 
-        <pre class="code-block"><code>
-pip install git+https://github.com/user/project.git
-        </code></pre>
+        <code-block language="sh">
+            pip install git+https://github.com/user/project.git
+        </code-block>
     </div>
 </template>
 
 <script setup lang="ts">
+import codeBlock from '@/components/code-block.vue';
 </script>
 
 <style lang="scss" scoped>
-  .title {
+h1 {
     font-weight: bold;
     margin-bottom: 0;
-  }
+    font-size: 1.6rem;
+}
 
-  .meta {
+h2 {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.meta {
     font-size: 0.875rem;
     color: #a9a9b3;
     margin-bottom: 1rem;
-  }
+}
 
-  code {
+code {
     color: #E74C3C !important;
-  }
-
-  .code-block {
-    color: #E74C3C;
     background-color: #f5f5f5;
-    padding-left: 1em;
-  }
+    padding: 0.25em;
+}
+
+a {
+    text-decoration: none;
+    color: #2d96bd;
+}
+
+a:hover {
+    color: #ef3982;
+}
 </style>

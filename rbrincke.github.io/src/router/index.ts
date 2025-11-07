@@ -13,6 +13,4 @@ for (const article of articles) {
   router.addRoute({ path: '/' + article.link, component: article.component })
 }
 
-console.log(router.getRoutes());
-
 export default router;
