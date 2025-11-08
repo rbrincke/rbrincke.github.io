@@ -11,7 +11,7 @@ export type Section = {
 
 const titleToId = (text: string): string => text.toLowerCase().trim().replace(/\s+/g, '-');
 
-export function findSections(root: HTMLElement, depth: string[] = ['H2', 'H3']): Section[] {
+export function findSections(root: HTMLElement, depth: string[] = ['H2']): Section[] {
     const matches: Section[] = [];
 
     for (const current of root?.children ?? []) {

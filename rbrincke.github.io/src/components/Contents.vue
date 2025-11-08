@@ -7,7 +7,7 @@ import { articles } from '@/articles/list';
     <div>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-8">
+                <div class="col-8" style="margin-bottom: 2rem;">
                     <ArticleHeader v-for="[id, article] of Object.entries(articles)" class="article" :title="article.title"
                         :date="article.date" :summary="article.summary"
                         :link="id" :tags="article.tags">

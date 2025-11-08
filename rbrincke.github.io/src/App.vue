@@ -41,6 +41,11 @@ h2 {
     font-size: 1.2rem !important;
 }
 
+h3 {
+    font-weight: bold !important;
+    font-size: 1.0rem !important;
+}
+
 p code {
     color: #E74C3C;
     background-color: #f5f5f5;

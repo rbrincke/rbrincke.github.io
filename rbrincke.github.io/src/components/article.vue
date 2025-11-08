@@ -2,7 +2,7 @@
     <div class="col-xs-12 col-lg-10 with-sidenotes">
         <h1 class="title">{{ article.title }}</h1>
 
-        <div class="table-of-contents">
+        <div class="table-of-contents" v-if="index.length > 0">
             <div style="text-transform: uppercase; font-size: 0.9rem; font-weight: bolder; margin-bottom: 0.75rem;">contents</div>
             <ul>
                 <li v-for="v of index"><a :href="`#${v.id}`">{{ v.title }}</a></li>
