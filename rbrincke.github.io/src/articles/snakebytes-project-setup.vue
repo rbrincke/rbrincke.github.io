@@ -1,6 +1,6 @@
 <template>
     <Article :article="article">
-        <p style="margin-top: 3rem">
+        <p>
             Python project configuration is not at all straightforward.
         </p>
 
