@@ -1,8 +1,0 @@
-<div class="sidenotes-footnotes">
-    <hr>
-    {{ range $num, $text := (.Page.Scratch.Get "sidenotes") }}
-    <sup>{{ $num }}</sup>
-    {{ safeHTML $text | markdownify }}
-    <br><br>
-    {{ end }}
-</div>
