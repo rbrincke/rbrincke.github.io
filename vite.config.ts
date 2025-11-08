@@ -34,5 +34,5 @@ export default defineConfig({
         },
     },
   },
-  base: '/rbrincke.github.io'
+  base: '/rbrincke.github.io/'
 })
