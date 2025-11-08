@@ -1,19 +1,13 @@
 <template>
-    <div class="col-sm-12 col-md-8">
-        <h1 class="title">Snakebytes: Project Setup</h1>
-        <div class="meta">
-            <font-awesome-icon :icon="['fas', 'calendar-alt']" /> <time datetime="2023-07-05">2023-07-05</time> in <a
-                href="/">Snakebytes</a>
-        </div>
-
-        <p>
+    <Article :article="article">
+        <p style="margin-top: 3rem">
             Python project configuration is not at all straightforward.
         </p>
 
         <p>
             When I first started working with Python a few months back I naively assumed project configuration was
             opinionated, something akin to Java and Maven. I tried following a few examples with varying degrees of
-            success (most of which were really quite different!) - nothing really worked well.
+            success (most of which were really quite different!) – nothing really worked well.
         </p>
 
         <p>
@@ -178,43 +172,18 @@
         <code-block language="sh">
             pip install git+https://github.com/user/project.git
         </code-block>
-    </div>
+    </Article>
 </template>
 
 <script setup lang="ts">
 import codeBlock from '@/components/code-block.vue';
+import Article from '@/components/article.vue';
+import { type ArticleHeader } from '@/components/header';
+import { ref } from 'vue';
+import { articles } from '@/articles/list';
+
+const article = ref<ArticleHeader>(articles['snakebytes-project-setup']!);
 </script>
 
 <style lang="scss" scoped>
-h1 {
-    font-weight: bold;
-    margin-bottom: 0;
-    font-size: 1.6rem;
-}
-
-h2 {
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.meta {
-    font-size: 0.875rem;
-    color: #a9a9b3;
-    margin-bottom: 1rem;
-}
-
-code {
-    color: #E74C3C !important;
-    background-color: #f5f5f5;
-    padding: 0.25em;
-}
-
-a {
-    text-decoration: none;
-    color: #2d96bd;
-}
-
-a:hover {
-    color: #ef3982;
-}
 </style>

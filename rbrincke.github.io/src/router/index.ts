@@ -1,5 +1,5 @@
-import { articles } from '@/contents';
-import Contents from '@/Contents.vue';
+import { articles } from '@/articles/list';
+import Contents from '@/components/Contents.vue';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -9,8 +9,8 @@ const router = createRouter({
   ],
 });
 
-for (const article of articles) {
-  router.addRoute({ path: '/' + article.link, component: article.component })
+for (const [id, article] of Object.entries(articles)) {
+  router.addRoute({ path: '/' + id, component: article.component })
 }
 
 export default router;

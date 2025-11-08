@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ArticleHeader from './components/article-header.vue';
-import { articles } from './contents';
+import ArticleHeader from '@/components/article-header.vue';
+import { articles } from '@/articles/list';
 </script>
 
 <template>
@@ -8,9 +8,9 @@ import { articles } from './contents';
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-8">
-                    <ArticleHeader v-for="article in articles" class="article" :title="article.title"
-                        :category="article.category" :date="article.date" :summary="article.summary"
-                        :link="article.link" :tags="article.tags">
+                    <ArticleHeader v-for="[id, article] of Object.entries(articles)" class="article" :title="article.title"
+                        :date="article.date" :summary="article.summary"
+                        :link="id" :tags="article.tags">
                     </ArticleHeader>
                 </div>
             </div>

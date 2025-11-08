@@ -1,7 +1,6 @@
 <script setup lang="ts">
 defineProps<{
   title: string
-  category: string
   date: string
   summary: string
   link: string
@@ -16,13 +15,13 @@ defineProps<{
     </h5>
 
     <div class="meta">
-      <time :datetime="date">{{ date }}</time> in <a :href="link">{{ category }}</a>
+      <time :datetime="date">{{ date }}</time>
     </div>
 
     <p class="summary">{{ summary }}</p>
 
     <div class="row footer">
-      <div class="col"><a href="http://rbrincke.github.io">Read More</a></div>
+      <div class="col"><a :href="link">Read More</a></div>
       <div class="col text-end">
         <font-awesome-icon :icon="['fas', 'tags']" /> {{ tags.join(', ') }}
       </div>
