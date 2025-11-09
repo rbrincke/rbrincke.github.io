@@ -1,28 +1,22 @@
 <template>
-    <span>
-        <sup v-if="num">{{ num }}</sup>
-        <span class="sidenote">
-            <sup v-if="num" style="font-weight: bold;">{{ num }}</sup> <slot></slot>
-        </span>
-    </span>
+    <sup ref="el" v-if="num !== null || num !== undefined">{{ num }}</sup>
 </template>
 
 <script setup lang="ts">
-defineProps<{
-    num?: number
-}>();
+import { ref, onMounted, inject, useSlots } from 'vue';
+
+const num = ref(1);
+
+const slots = useSlots();
+const el = ref<HTMLElement>()!;
+const registerNote = inject<(content: () => any, element: HTMLElement) => number>('registerNote')!;
+
+onMounted(() => {
+    if (el.value && slots.default && registerNote) {
+        num.value = registerNote(slots.default, el.value);
+    }
+});
 </script>
 
 <style lang="scss" scopes>
-    .sidenote {
-        float: right;
-        margin-right: -200px;
-        width: 180px;
-        position: relative;
-        transform: translateY(10%);
-
-        font-size: .8rem;
-        line-height: 110%;
-        font-weight: 200;
-    }
 </style>

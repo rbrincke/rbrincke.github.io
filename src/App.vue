@@ -60,4 +60,13 @@ p a {
 p a:hover {
     color: #ef3982;
 }
+
+.note a {
+    text-decoration: none;
+    color: #2d96bd;
+}
+
+.note a:hover {
+    color: #ef3982;
+}
 </style>

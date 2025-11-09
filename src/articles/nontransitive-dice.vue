@@ -31,12 +31,12 @@
         <p>
             Like almost everything else in popular mathematics, nontransitive dice were popularized by Martin Gardner in
             his
-            Scientific American column <note :num="1">Gardner, M. (1970). The paradox of the nontransitive dice.
+            Scientific American column<note>Gardner, M. (1970). The paradox of the nontransitive dice.
                 Scientific
                 American, 223 (Dec. 1970) 110–111.</note>. Many more examples of nontransitive dice exist. The
             arrangements here
             are not too hard to find, and in fact I provide code that you can run to find them yourself. This problem is
-            similar to the problem outlined in the introduction of a paper by Richard Savage<note :num="2">Savage, R. P.
+            similar to the problem outlined in the introduction of a paper by Richard Savage<note>Savage, R. P.
                 (1994). The Paradox of Nontransitive Dice. The American Mathematical Monthly, 101(5), 429.</note>.
         </p>
 
@@ -161,10 +161,8 @@
         This is seemingly paradoxical, so it may come as a surprise that not only do such arrangements exist for our
         dice,
         there seem to be 10,705 of them. The top twenty optimal arrangements are shown here.<note :num="3">
-            <p>
-                The solutions are found through enumeration. Note that despite the approach below, this only works for
-                comparatively small problems.
-            </p>
+            The solutions are found through enumeration. Note that despite the approach below, this only works for
+                comparatively small problems.<br><br>
 
             <p>
                 At first glance it may be tempting to take the 18 labels, create all possible permutations, and assign
@@ -441,7 +439,7 @@
         <p>
             Despite the many non-transitive arrangements, the labels (1, 5, 10, 11, 13, 17) for A, (3, 4, 7, 12, 15, 16)
             for B
-            and (2, 6, 8, 9, 14 18) for C provide a fair arrangement<note :num=3>This is a set of <a href="https://en.wikipedia.org/wiki/Go_First_Dice">Go First
+            and (2, 6, 8, 9, 14 18) for C provide a fair arrangement<note>This is a set of <a href="https://en.wikipedia.org/wiki/Go_First_Dice">Go First
                 Dice</a>.</note> where each die has an 18/36 probability of
             beating
             another.
@@ -477,51 +475,51 @@ const article = ref<ArticleHeader>(articles['nontransitive-dice']!);
 </script>
 
 <style lang="scss" scoped>
-.dice-table {
-    margin: auto;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
+    .dice-table {
+        margin: auto;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
 
-.dice-table td {
-    width: 2rem;
-    height: 2rem;
-    padding: 0.5rem;
-    text-align: center;
-    vertical-align: middle;
-}
+    .dice-table td {
+        width: 2rem;
+        height: 2rem;
+        padding: 0.5rem;
+        text-align: center;
+        vertical-align: middle;
+    }
 
-.dice-table thead {
-    border-bottom: 2px solid #d8d8d8;
-}
+    .dice-table thead {
+        border-bottom: 2px solid #d8d8d8;
+    }
 
-.dice-table td:nth-child(1) {
-    text-align: center;
-    font-weight: bold;
-    border-right: 2px solid #d8d8d8;
-}
+    .dice-table td:nth-child(1) {
+        text-align: center;
+        font-weight: bold;
+        border-right: 2px solid #d8d8d8;
+    }
 
-.dice-table th {
-    text-align: center;
-}
+    .dice-table th {
+        text-align: center;
+    }
 
-.dice-table th:nth-child(1) {
-    text-align: right;
-    font-weight: bold;
-    padding-right: 1rem;
-    border-right: 2px solid #d8d8d8;
-}
+    .dice-table th:nth-child(1) {
+        text-align: right;
+        font-weight: bold;
+        padding-right: 1rem;
+        border-right: 2px solid #d8d8d8;
+    }
 
-.wide td:nth-child(2) {
-    width: 10rem;
-}
+    .wide td:nth-child(2) {
+        width: 10rem;
+    }
 
-.wide td:nth-child(3) {
-    width: 10rem;
-}
+    .wide td:nth-child(3) {
+        width: 10rem;
+    }
 
-.wide td:nth-child(4) {
-    width: 10rem;
-}
+    .wide td:nth-child(4) {
+        width: 10rem;
+    }
 </style>

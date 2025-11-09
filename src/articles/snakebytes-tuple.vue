@@ -26,7 +26,7 @@
         </code-block>
 
         <p>
-            But alas – tuples are actually sequences. The code below does not do what you would expect it to<note :num="1">At least not what <i>I</i> expected it to do. It prints the string's characters because a Python string is iterable. I see how it could be, but I suspect more often than not passing a string into a function that accepts an iterable is a mistake.</note>: it prints the
+            But alas – tuples are actually sequences. The code below does not do what you would expect it to<note>At least not what <i>I</i> expected it to do. It prints the string's characters because a Python string is iterable. I see how it could be, but I suspect more often than not passing a string into a function that accepts an iterable is a mistake.</note>: it prints the
             characters in the string 'chicken' because <code>v = ('chicken')</code> is identical to <code>v = 'chicken'</code>, and so it iterates
             over the characters instead. IDEs like PyCharm hint at removing the 'redundant parentheses'.
         </p>
