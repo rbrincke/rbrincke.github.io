@@ -5,3 +5,7 @@ export type ArticleHeader = {
     tags: string[];
     component: any
 }
+
+export function link(id: string) {
+    return `/posts/${id}`;
+}

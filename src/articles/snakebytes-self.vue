@@ -75,7 +75,7 @@
         </code-block>
 
         <p>
-            Combine this with Python's <a href="/snakebytes-scope">implicit variable declarations</a> and the result may not end up as
+            Combine this with Python's <a :href="link('snakebytes-scope')">implicit variable declarations</a> and the result may not end up as
             expected, demonstrated below using two very similar looking <code>add</code> methods.
         </p>
 
@@ -125,7 +125,7 @@
 <script setup lang="ts">
 import codeBlock from '@/components/code-block.vue';
 import Article from '@/components/article.vue';
-import { type ArticleHeader } from '@/components/header';
+import { link, type ArticleHeader } from '@/components/header';
 import { ref } from 'vue';
 import { articles } from '@/articles/list';
 
