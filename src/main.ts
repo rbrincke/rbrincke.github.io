@@ -12,11 +12,15 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
 import 'highlight.js/styles/stackoverflow-light.css'
 import 'highlight.js/lib/common';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
+import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 
 library.add(faHouse);
 library.add(faTags);
 library.add(faCalendarAlt);
 library.add(faCopy);
+library.add(faCheck);
+library.add(faMinus);
 
 const app = createApp(App)
 

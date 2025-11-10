@@ -54,75 +54,26 @@
             follows, where each cell indicates whether die A wins the throw with a 1.
         </p>
 
-        <table class="dice-table">
-            <thead>
-                <tr>
-                    <th> A→<br>↓B </th>
-                    <th>3</th>
-                    <th>6</th>
-                    <th>9</th>
-                    <th>12</th>
-                    <th>15</th>
-                    <th>18</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>14</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>17</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="[3, 6, 9, 12, 15, 18]" column-color="#2d96bd" column-name="A" 
+                    :row="[2, 5, 8, 11, 14, 17]" row-color="#ef3982" row-name="B">
+                </DiceHeadToHeadTable>
+            </div>
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="[2, 5, 8, 11, 14, 17]" column-color="#ef3982" column-name="B" 
+                    :row="[1, 4, 7, 10, 13, 16]" row-color="#efb539" row-name="C">
+                </DiceHeadToHeadTable>
+            </div>
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="[1, 4, 7, 10, 13, 16]" column-color="#efb539" column-name="C" 
+                    :row="[3, 6, 9, 12, 15, 18]" row-color="#2d96bd" row-name="A">
+                </DiceHeadToHeadTable>
+            </div>
+        </div>
 
         <p>
             In this naive arrangement, die A beats B in 21 out of 36 cases, which is more than half. A similar grid
@@ -470,6 +421,7 @@ import { ref } from 'vue';
 import { articles } from '@/articles/list';
 import note from '@/components/note.vue';
 import Math from '@/components/Math.vue';
+import DiceHeadToHeadTable from './nontransitive-dice/dice-head-to-head-table.vue';
 
 const article = ref<ArticleHeader>(articles['nontransitive-dice']!);
 </script>
