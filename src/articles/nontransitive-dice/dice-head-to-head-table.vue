@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import Math from '@/components/Math.vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
     row: number[],
@@ -29,9 +30,7 @@ const props = defineProps<{
     columnName: string
 }>();
 
-const wins = props.row.reduce((acc, currentRow) => acc + props.column.reduce((acc, currentColumn) => currentColumn > currentRow ? acc + 1 : acc, 0), 0);
-
-
+const wins = computed(() => props.row.reduce((acc, currentRow) => acc + props.column.reduce((acc, currentColumn) => currentColumn > currentRow ? acc + 1 : acc, 0), 0));
 </script>
 
 <style lang="scss" scoped>

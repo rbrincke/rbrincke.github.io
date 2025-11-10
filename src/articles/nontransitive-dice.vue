@@ -109,9 +109,10 @@
             a property as non-transitive or intransitive.
         </p>
 
+        <p>
         This is seemingly paradoxical, so it may come as a surprise that not only do such arrangements exist for our
         dice,
-        there seem to be 10,705 of them. The top twenty optimal arrangements are shown here.<note :num="3">
+        there seem to be 10,705 of them.<note :num="3">
             The solutions are found through enumeration. Note that despite the approach below, this only works for
                 comparatively small problems.<br><br>
 
@@ -159,202 +160,41 @@
                     repository</a>.
             </p>
         </note>
+        </p>
 
-        <table class="dice-table wide">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>A</th>
-                    <th>B</th>
-                    <th>C</th>
-                    <th>P(A>B)</th>
-                    <th>P(B>C)</th>
-                    <th>P(C>A)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>1, 10, 11, 12, 13, 14</td>
-                    <td>5, 6, 7, 8, 9, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.6944</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>1, 9, 11, 12, 13, 14</td>
-                    <td>5, 6, 7, 8, 10, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.6667</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>1, 8, 11, 12, 13, 14</td>
-                    <td>5, 6, 7, 9, 10, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.6389</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>1, 9, 10, 12, 13, 14</td>
-                    <td>5, 6, 7, 8, 11, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.6389</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>1, 7, 11, 12, 13, 14</td>
-                    <td>5, 6, 8, 9, 10, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.6111</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>1, 8, 10, 12, 13, 14</td>
-                    <td>5, 6, 7, 9, 11, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.6111</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>1, 9, 10, 11, 13, 14</td>
-                    <td>5, 6, 7, 8, 12, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.6111</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>1, 6, 7, 8, 17, 18</td>
-                    <td>3, 4, 5, 14, 15, 16</td>
-                    <td>2, 9, 10, 11, 12, 13</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>1, 2, 11, 12, 13, 18</td>
-                    <td>6, 7, 8, 9, 10, 17</td>
-                    <td>3, 4, 5, 14, 15, 16</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>1, 6, 11, 12, 13, 14</td>
-                    <td>5, 7, 8, 9, 10, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td>1, 7, 10, 12, 13, 14</td>
-                    <td>5, 6, 8, 9, 11, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td>1, 8, 9, 12, 13, 14</td>
-                    <td>5, 6, 7, 10, 11, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>13</td>
-                    <td>1, 8, 10, 11, 13, 14</td>
-                    <td>5, 6, 7, 9, 12, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>14</td>
-                    <td>1, 9, 10, 11, 12, 14</td>
-                    <td>5, 6, 7, 8, 13, 18</td>
-                    <td>2, 3, 4, 15, 16, 17</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>15</td>
-                    <td>1, 2, 9, 14, 15, 16</td>
-                    <td>6, 7, 8, 11, 12, 13</td>
-                    <td>3, 4, 5, 10, 17, 18</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                    <td>0.5833</td>
-                </tr>
-                <tr>
-                    <td>16</td>
-                    <td>1, 8, 9, 10, 11, 12</td>
-                    <td>4, 5, 6, 7, 17, 18</td>
-                    <td>2, 3, 13, 14, 15, 16</td>
-                    <td>0.5556</td>
-                    <td>0.5556</td>
-                    <td>0.7222</td>
-                </tr>
-                <tr>
-                    <td>17</td>
-                    <td>1, 2, 12, 13, 14, 15</td>
-                    <td>7, 8, 9, 10, 11, 18</td>
-                    <td>3, 4, 5, 6, 16, 17</td>
-                    <td>0.5556</td>
-                    <td>0.7222</td>
-                    <td>0.5556</td>
-                </tr>
-                <tr>
-                    <td>18</td>
-                    <td>1, 8, 9, 10, 11, 13</td>
-                    <td>4, 5, 6, 7, 17, 18</td>
-                    <td>2, 3, 12, 14, 15, 16</td>
-                    <td>0.5556</td>
-                    <td>0.5556</td>
-                    <td>0.6944</td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td>1, 2, 12, 13, 14, 15</td>
-                    <td>6, 8, 9, 10, 11, 18</td>
-                    <td>3, 4, 5, 7, 16, 17</td>
-                    <td>0.5556</td>
-                    <td>0.6944</td>
-                    <td>0.5556</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>1, 10, 11, 12, 13, 15</td>
-                    <td>4, 6, 7, 8, 9, 18</td>
-                    <td>2, 3, 5, 14, 16, 17</td>
-                    <td>0.6944</td>
-                    <td>0.5556</td>
-                    <td>0.5556</td>
-                </tr>
-            </tbody>
-        </table>
+        <p>
+            All optimal arrangements are available here, ordered first by the least dominant die and then by the most dominant die.
+        </p>
+
+        <div class="row" v-if="results">
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="results[selectedResult - 1][0]" column-color="#2d96bd" column-name="A" 
+                    :row="results[selectedResult - 1][1]" row-color="#ef3982" row-name="B">
+                </DiceHeadToHeadTable>
+            </div>
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="results[selectedResult - 1][1]" column-color="#ef3982" column-name="B" 
+                    :row="results[selectedResult - 1][2]" row-color="#efb539" row-name="C">
+                </DiceHeadToHeadTable>
+            </div>
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="results[selectedResult - 1][2]" column-color="#efb539" column-name="C" 
+                    :row="results[selectedResult - 1][0]" row-color="#2d96bd" row-name="A">
+                </DiceHeadToHeadTable>
+            </div>
+        </div>
+        
+        <div class="row" v-if="results">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="solution">Solution #</span>
+                    <input type="number" min="1" :max="results.length" v-model="selectedResult" class="form-control" placeholder="Solution number" aria-label="Solution number" aria-describedby="solution">
+                </div>
+            </div>
+        </div>
 
         <p>
             Even though any non-transitive set gives Warren an advantage, some non-transitive sets are preferable over
@@ -424,6 +264,21 @@ import Math from '@/components/Math.vue';
 import DiceHeadToHeadTable from './nontransitive-dice/dice-head-to-head-table.vue';
 
 const article = ref<ArticleHeader>(articles['nontransitive-dice']!);
+
+const results = ref();
+const selectedResult = ref(1);
+
+const loadResults = async () => {
+    try {
+        // Dynamically import the JSON file
+        const response = await fetch('/data/nontransitive-dice-results.json').then(r => r.json());
+        results.value = response;
+    } catch (error) {
+        console.error('Error loading JSON:', error);
+    }
+};
+
+loadResults();
 </script>
 
 <style lang="scss" scoped>
