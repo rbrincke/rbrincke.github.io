@@ -1,5 +1,5 @@
 <template>
-    <span ref="mathContainer"></span>
+    <span ref="equationContainer"></span>
 </template>
 
 <script lang="ts" setup>
@@ -16,11 +16,11 @@ const props = defineProps({
     }
 });
 
-const mathContainer = ref(null);
+const equationContainer = ref(null);
 
 const renderMath = () => {
-    if (mathContainer.value && props.expression) {
-        katex.render(props.expression, mathContainer.value, {
+    if (equationContainer.value && props.expression) {
+        katex.render(props.expression, equationContainer.value, {
             throwOnError: false,
             displayMode: props.displayMode
         });

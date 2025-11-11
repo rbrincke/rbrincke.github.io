@@ -1,57 +1,36 @@
 <template>
     <Article :article="article">
-        <p>Warren proposes a game to Bill.</p>
-
         <p>
-            On the table are 3 dice with 6 sides each, and 18 sticky labels with the numbers 1 through 18. Player 1 gets
-            to
-            configure the dice by sticking the labels on the die faces, though no face may be left unlabeled. Player 2
-            then
-            gets the first pick.
+            On the table are 3 regularly shaped dice, 6 sides each, and 18 loose sticky labels with the numbers 1 through 18. You get
+            to configure the dice by sticking the labels on however you like, as long as you use all labels and leave none of the faces unlabeled.
+            Your opponent gets the first pick.
         </p>
 
         <p>
-            In each of the ten rounds that follow, each player will cast their die. The player with the highest roll
-            wins the
-            round. The player who wins most rounds wins the game.
+            Next, you play. In each of the ten rounds that follow, each player will roll their die. The player with the highest roll
+            wins the round. The player who wins the most rounds wins the game.
         </p>
 
         <p>
-            Should Bill choose to be player 1 or player 2?
+            Is this a good deal?
         </p>
 
         <p>
-            It turns out that it is better to be player 1, provided you know how to arrange the labels on the dice.
-            Allegedly
-            Warren Buffett once challenged Bill Gates to a game using a set of pre-labeled dice and suggested that he
-            pick
-            first. Gates became suspicious, examined the dice, and demanded that Buffett pick first instead.
+            Allegedly, Warren Buffett once challenged Bill Gates to a game using a set of pre-labeled dice and suggested that he
+            pick first. Gates became suspicious, examined the dice, and demanded that Buffett pick first instead.
+        </p>
+
+        <h2>A naive arrangement</h2>
+
+        <p>
+            Consider a naive arrangement of the labels where every 3rd number is
+            assigned to a different die: die A gets labels (3, 6, 9, 12, 15, 18), die B gets labels (2, 5, 8, 11, 14, 17),
+            and die C gets labels (1, 4, 7, 10, 13, 16).
         </p>
 
         <p>
-            Like almost everything else in popular mathematics, nontransitive dice were popularized by Martin Gardner in
-            his
-            Scientific American column<note>Gardner, M. (1970). The paradox of the nontransitive dice.
-                Scientific
-                American, 223 (Dec. 1970) 110–111.</note>. Many more examples of nontransitive dice exist. The
-            arrangements here
-            are not too hard to find, and in fact I provide code that you can run to find them yourself. This problem is
-            similar to the problem outlined in the introduction of a paper by Richard Savage<note>Savage, R. P.
-                (1994). The Paradox of Nontransitive Dice. The American Mathematical Monthly, 101(5), 429.</note>.
-        </p>
-
-        <h2>The arrangement</h2>
-
-        <h3>A naive arrangement</h3>
-
-        <p>
-            For the sake of illustration, consider a naive arrangement of the labels in which every 3rd number is
-            assigned:
-            die A gets labels (3, 6, 9, 12, 15, 18), die B gets labels (2, 5, 8, 11, 14, 17), and die C gets labels (1,
-            4, 7,
-            10, 13, 16). A six-by-six grid that pitches each outcome against each other outcome between dice A and B
-            looks as
-            follows, where each cell indicates whether die A wins the throw with a 1.
+            Below are three six-by-six grids that compare each cast of A against B, each cast of B against C, and each cast of C against A.
+            Each cell has a checkmark that indicates if the cast in the column beats the cast in the row.
         </p>
 
         <div class="row">
@@ -76,113 +55,51 @@
         </div>
 
         <p>
-            In this naive arrangement, die A beats B in 21 out of 36 cases, which is more than half. A similar grid
-            pitching B
-            against C would show that B also beats C in 21 out of 36 cases, and that A beats C in 21 out of 36 cases
-            too. A is
-            preferred over B, and B is preferred over C, and the transitive property that A is also preferred over C
-            holds. In
-            more formal notation, <Math expression="A \succ B \succ C"></Math>. No die beats die A.
+            In this naive arrangement, A beats B in 21 out of 36 cases. So far, so good. B in turn beats C in 21 out of 36 cases, but C beats A in only 15 out of 36 cases.
+            A beats B, B beats C, but A also beats C. No die beats die A. In more formal notation, <Equation expression="A \succ B \succ C"></Equation>.<note>Mathematicians call this binary relationship
+            between the elements <i>transitive</i>.</note>
         </p>
 
         <p>
-            Clearly this is not a good way for Warren to arrange the labels because Bill, who gets first choice, would
-            simply
-            pick die A.
+            Clearly this is not a good way for you to arrange the labels because your opponent, who gets first choice, would
+            simply pick A.
         </p>
 
-        <h3>An optimal arrangement</h3>
+        <h2>An optimal arrangement</h2>
 
         <p>
-            Warren's advantage hinges on an arrangement such that whatever die Bill picks, there is always a die that
-            can beat
-            it.
+            Your advantage hinges on finding an arrangement such that whatever your opponent picks, there is always a choice that
+            beats it.
         </p>
 
         <p>
-            Such a property may colloquially be referred to as a Rock-Paper-Scissors property. For Rock-Paper-Scissors,
-            Paper
-            beats Rock, Scissors beats Paper, and Rock beats Scissors. Regardless of the choice, there exists another
-            choice
-            that beats it. In other words, <Math expression="A \succ B \succ C \succ A"></Math>. Mathematicians refer to
-            such
-            a property as non-transitive or intransitive.
+            Almost certainly you're already familiar with a game that has such a feature. In Rock-Paper-Scissors, Paper beats Rock, Rock beats Scissors, and Scissors beats Paper.
+            Imagine Rock-Paper-Scissors, but played sequentially instead of simultaneously. Whatever your opponent chooses, there is a 
+            choice that beats it: <Equation expression="Paper \succ Rock \succ Scissors \succ Paper"></Equation>. This forms a cycle, an infinite loop.<note>Mathematicians call this <i>nontransitive</i> or <i>intransitive</i>.</note>
         </p>
 
         <p>
-        This is seemingly paradoxical, so it may come as a surprise that not only do such arrangements exist for our
-        dice,
-        there seem to be 10,705 of them.<note :num="3">
-            The solutions are found through enumeration. Note that despite the approach below, this only works for
-                comparatively small problems.<br><br>
-
-            <p>
-                At first glance it may be tempting to take the 18 labels, create all possible permutations, and assign
-                positions
-                1 through 6 to group/die A, 6 through 12 to B, and the remainder to C. Note however that 18! (factorial)
-                such
-                permutations exist, a huge number. Such a strategy generates many duplicate solutions where the label
-                order
-                within a group differs.
-            </p>
-
-            <p>
-                It is sufficient to enumerate the number of possible groupings, known as combinations. The number of
-                unique
-                possible arrangements equals <Math expression="{18 \choose 6} {12 \choose 6} {6 \choose 6}"></Math>, or
-                17,153,136. To generate this, create an array of size 18 with six entries of 0, 1 and 2 each. These
-                represent
-                group/die assignments. This set contains duplicate entries, and is referred to as a multiset, which can
-                be
-                permutated efficiently using specialized algorithms, in this case using Aaron Williams' <i>Loopless
-                    generation
-                    of multiset permutations using a constant number of variables by prefix shifts</i> (2008, SODA '09
-                Proceedings
-                of the 20th annual ACM-SIAM symposium on Discrete algorithms, 987-996.). By using each multiset
-                permutation as
-                an overlay/mask for the labels, each possible grouping is generated without regard for the
-                group-internal label
-                order.
-            </p>
-
-            <p>
-                The number of solutions can be further reduced by a factor of three. A solution <Math
-                    expression="A \succ B \succ C \succ A"></Math> is equivalent to one where the labels are shifted by
-                one or two
-                positions (such that B takes the place of A, etcetera). To prevent this, anchor the first element to
-                always be
-                in group/die A. This leaves 5,717,712 possible solutions to be evaluated.
-            </p>
-
-            <p>
-                Code to produce these solutions is found <a href="https://github.com/rbrincke/nontransitive-dice">in
-                    this GitHub
-                    repository</a>.
-            </p>
-        </note>
+            It may come as a surprise that such arrangements not only exist, but there are 10,705 of them. Arrangement 1 offers 
+            a 21 out of 36 chance of winning any single cast, equal to a {{ Math.round(21/36 * 1000) / 10 }}% probability.
         </p>
 
-        <p>
-            All optimal arrangements are available here, ordered first by the least dominant die and then by the most dominant die.
-        </p>
-
-        <div class="row" v-if="results">
+        <div class="row" v-if="selectedResult">
             <div class="col">
                 <DiceHeadToHeadTable 
-                    :column="results[selectedResult - 1][0]" column-color="#2d96bd" column-name="A" 
-                    :row="results[selectedResult - 1][1]" row-color="#ef3982" row-name="B">
+                    :column="selectedResult.a" column-color="#2d96bd" column-name="A" 
+                    :row="selectedResult.b" row-color="#ef3982" row-name="B">
                 </DiceHeadToHeadTable>
             </div>
             <div class="col">
                 <DiceHeadToHeadTable 
-                    :column="results[selectedResult - 1][1]" column-color="#ef3982" column-name="B" 
-                    :row="results[selectedResult - 1][2]" row-color="#efb539" row-name="C">
+                    :column="selectedResult.b" column-color="#ef3982" column-name="B" 
+                    :row="selectedResult.c" row-color="#efb539" row-name="C">
                 </DiceHeadToHeadTable>
             </div>
             <div class="col">
                 <DiceHeadToHeadTable 
-                    :column="results[selectedResult - 1][2]" column-color="#efb539" column-name="C" 
-                    :row="results[selectedResult - 1][0]" row-color="#2d96bd" row-name="A">
+                    :column="selectedResult.c" column-color="#efb539" column-name="C" 
+                    :row="selectedResult.a" row-color="#2d96bd" row-name="A">
                 </DiceHeadToHeadTable>
             </div>
         </div>
@@ -190,66 +107,143 @@
         <div class="row" v-if="results">
             <div class="col">
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="solution">Solution #</span>
-                    <input type="number" min="1" :max="results.length" v-model="selectedResult" class="form-control" placeholder="Solution number" aria-label="Solution number" aria-describedby="solution">
+                    <span class="input-group-text" id="arrangement">Arrangement #</span>
+                    <input type="number" :min="1" :max="results.length" v-model="selectedResultIdx" class="form-control" placeholder="Arrangement number" aria-label="Arrangement number" aria-describedby="arrangement">
                 </div>
             </div>
         </div>
 
         <p>
-            Even though any non-transitive set gives Warren an advantage, some non-transitive sets are preferable over
-            others.
+            You can explore all arrangements by changing the arrangement number.
         </p>
 
         <p>
-            Consider first that Bill is likely aware of the crux of the problem, and will pick the die that gives Warren
-            the
-            least advantage. Warren therefore prefers solutions that ensure that the least dominant of the three pairs –
-            the
-            lowest of the three values – is as high as possible. For the top fifteen solutions this probability equals
-            21/36,
-            or 0.5833. Observe how solution 16 has a lower probability.
+            Even though any of these arrangements gives you an advantage, some are better than others. The arrangements have therefore
+            been ordered in a particular way.
         </p>
 
         <p>
-            Consider also that Bill may assume Warren's edge is the same regardless of which die he chooses. Note that
-            the top
-            7 solutions include one die that is dominated to a much larger extent. Bill may inadvertently choose this
-            die, so
-            it is in Warren's interest for this wildcard choice to be as advantageous as possible.
+            Consider first that your opponent may be (or become) aware of the crux of the problem, and may pick the die that gives you
+            the least advantage. You therefore prefer solutions that ensure that the least dominant of the three pairs –
+            the lowest of the three values – is as dominant as possible.
+            
+            For the top fifteen solutions this probability equals 21/36, or {{ Math.round(21/36 * 1000) / 10 }}%. Observe how arrangement 16 has a lower probability.
         </p>
 
         <p>
-            The arrangements above are ranked first according to the greatest least-dominant pair, and then according to
-            the
-            greatest wildcard edge.
+            Also consider that your opponent may incorrectly assume your edge is the same regardless of their choice. The top
+            seven arrangements include one die that is dominated to a much larger extent. Your opponent may inadvertently choose this
+            die, so it is in your interest for this wildcard choice to be as advantageous as possible.
         </p>
 
-        <h3>A fair arrangement</h3>
+        <p>
+            Arrangements are therefore ordered by quality: first by the most dominant of the <i>least</i> dominant die, your guaranteed advantage, and subsequently by the most dominant single die (you may get lucky!).
+        </p>
+
+        <p>
+            You choose arrangement 1. Your opponent chooses C, leading you to choose B. What's your probability of winning a best of 10?
+        </p>
+
+        <p>
+            These probabilities are computed using a binomial distribution.
+            Your chance of winning more than 5 rounds is 59.08%, while your opponent's probability of winning more than 5 rounds
+            is 19.54%. The chance of a tie, both of you winning exactly 5 rounds, is 0.2138 or 21.38%.
+        </p>
+
+        <h2>Enumerating arrangements</h2>
+        <p>
+            The solutions are found through enumeration. A form of brute force, but with some thought.
+        </p>
+
+        <p>
+            You may be tempted to take the 18 labels, create all possible permutations, and assign
+            positions 1 through 6 to group/die A, 6 through 12 to B, and the remainder to C. Note however that 18! (factorial)
+            such permutations exist, a huge number. You'll also end up with many duplicate solutions with swapped labels on the same die.
+        </p>
+
+        <p>
+            It is much better to enumerate the number of unique possible <i>groupings</i>, known as combinations. The number of
+            unique possible arrangements equals <Equation expression="{18 \choose 6} {12 \choose 6} {6 \choose 6}"></Equation>, or
+            17,153,136. A lot of work by hand, but no problem for modern computers.
+        </p>
+
+        <p>
+            To generate these combinations, create an array of length 18 with six entries of a, b and c each representing group 
+            assignments for the numbers 1 through 18. For example, <code>abcabcabcabcabcabc</code> corresponds to the naive arrangement from earlier: the first number goes on A, the second in B, the third on C, the fourth on A, etcetera. 
+        </p>
+
+        <p>
+            We now want all possible <i>permutations</i> of this multiset. Multisets are permutated efficiently using specialized 
+            algorithms. In this case I used Aaron Williams' algorithm<note>Williams, A (2009). Loopless
+            generation of multiset permutations using a constant number of variables by prefix shifts. Proceedings of the 2009 
+            Annual ACM-SIAM Symposium on Discrete Algorithms (SODA), 987-996.</note>. By using each multiset
+            permutation as an overlay/mask for the labels, each possible grouping is generated without regard for the
+            group-internal label order (swapping the position of two a's does not generate a new permutation).
+        </p>
+
+        <p>
+            The number of solutions can be further reduced by a factor of three. Why? A solution where <Equation
+                expression="A \succ B \succ C \succ A"></Equation> is equivalent to <Equation
+                expression="B \succ C \succ A \succ B"></Equation> if all we have done is relabel the same three dice.
+                To prevent this, anchor the first element (1) to always be in group A. This leaves 5,717,712 possible 
+                solutions to be evaluated.
+        </p>
+
+        <p>
+            Code to produce the arrangements is found <a href="https://github.com/rbrincke/nontransitive-dice">in
+                this GitHub repository</a>.
+        </p>
+
+        <p>
+            Note that despite this approach, enumeration only works for comparatively small problems.
+        </p>
+
+        <h2>A fair arrangement</h2>
+
+        <p>
+            Finally, these dice are not inherently unfair.
+        </p>
 
         <p>
             Despite the many non-transitive arrangements, the labels (1, 5, 10, 11, 13, 17) for A, (3, 4, 7, 12, 15, 16)
-            for B
-            and (2, 6, 8, 9, 14 18) for C provide a fair arrangement<note>This is a set of <a href="https://en.wikipedia.org/wiki/Go_First_Dice">Go First
-                Dice</a>.</note> where each die has an 18/36 probability of
-            beating
-            another.
+            for B and (2, 6, 8, 9, 14, 18) for C provide a fair arrangement<note>This is a set of <a href="https://en.wikipedia.org/wiki/Go_First_Dice">Go First
+                Dice</a>.</note> where each die has an 18/36 probability of beating any other.
         </p>
 
-        <h2>The odds</h2>
+        <div class="row">
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="[1, 5, 10, 11, 13, 17]" column-color="#2d96bd" column-name="A" 
+                    :row="[3, 4, 7, 12, 15, 16]" row-color="#ef3982" row-name="B">
+                </DiceHeadToHeadTable>
+            </div>
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="[3, 4, 7, 12, 15, 16]" column-color="#ef3982" column-name="B" 
+                    :row="[2, 6, 8, 9, 14, 18]" row-color="#efb539" row-name="C">
+                </DiceHeadToHeadTable>
+            </div>
+            <div class="col">
+                <DiceHeadToHeadTable 
+                    :column="[2, 6, 8, 9, 14, 18]" column-color="#efb539" column-name="C" 
+                    :row="[1, 5, 10, 11, 13, 17]" row-color="#2d96bd" row-name="A">
+                </DiceHeadToHeadTable>
+            </div>
+        </div>
+
+        <h2>More dice</h2>
 
         <p>
-            Warren arranges the dice according to solution 1. Bill chooses die C, leading Warren to choose die B. How
-            likely
-            is he to win?
+            Like almost everything else in popular mathematics, nontransitive dice were popularized by Martin Gardner in
+            his
+            Scientific American column<note>Gardner, M. (1970). The paradox of the nontransitive dice.
+                Scientific American, 223 (Dec. 1970) 110–111.</note>.
         </p>
 
         <p>
-            Warren's chance of winning more than 5 rounds is 0.5908, while Bill's chance of winning more than 5 rounds
-            is
-            0.1954. The chance of both players winning exactly 5 rounds is 0.2138. These probabilities are computed
-            using a
-            binomial distribution.
+            Many more examples of nontransitive dice exist. The problem here is
+            similar to the problem outlined in the introduction of a paper by Richard Savage<note>Savage, R. P.
+                (1994). The Paradox of Nontransitive Dice. The American Mathematical Monthly, 101(5), 429.</note>.
         </p>
     </Article>
 </template>
@@ -257,21 +251,34 @@
 <script setup lang="ts">
 import Article from '@/components/article.vue';
 import { type ArticleHeader } from '@/components/header';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { articles } from '@/articles/list';
 import note from '@/components/note.vue';
-import Math from '@/components/Math.vue';
+import Equation from '@/components/Equation.vue';
 import DiceHeadToHeadTable from './nontransitive-dice/dice-head-to-head-table.vue';
 
 const article = ref<ArticleHeader>(articles['nontransitive-dice']!);
 
-const results = ref();
-const selectedResult = ref(1);
+const results = ref<number[][][]>();
+const selectedResultIdx = ref(1);
+
+const selectedResult = computed(() => {
+    if (results.value === undefined) return;
+
+    const validIndex = Math.min(Math.max(1, selectedResultIdx.value), results.value.length);
+    const result = results.value[validIndex - 1]!;
+
+    return {
+        a: result[0]!,
+        b: result[1]!,
+        c: result[2]!
+    };
+})
 
 const loadResults = async () => {
     try {
         // Dynamically import the JSON file
-        const response = await fetch('/data/nontransitive-dice-results.json').then(r => r.json());
+        const response: number[][][] = await fetch('/data/nontransitive-dice-results.json').then(r => r.json());
         results.value = response;
     } catch (error) {
         console.error('Error loading JSON:', error);

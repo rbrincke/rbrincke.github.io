@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import Math from '@/components/Math.vue';
+import Math from '@/components/Equation.vue';
 import { computed } from 'vue';
 
 const props = defineProps<{
