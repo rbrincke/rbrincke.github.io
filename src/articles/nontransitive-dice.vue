@@ -104,11 +104,11 @@
             </div>
         </div>
         
-        <div class="row" v-if="results">
+        <div class="row" v-if="arrangements">
             <div class="col">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="arrangement">Arrangement #</span>
-                    <input type="number" :min="1" :max="results.length" v-model="selectedResultIdx" class="form-control" placeholder="Arrangement number" aria-label="Arrangement number" aria-describedby="arrangement">
+                    <input type="number" :min="1" :max="arrangements.length" v-model="selectedArrangement"  @input="selectedArrangement = Math.min(Math.max(selectedArrangement, 1), arrangements.length)" class="form-control" placeholder="Arrangement number" aria-label="Arrangement number" aria-describedby="arrangement">
                 </div>
             </div>
         </div>
@@ -147,17 +147,17 @@
         <p>
             These probabilities are computed using a binomial distribution.
             Your chance of winning more than 5 rounds is 59.08%, while your opponent's probability of winning more than 5 rounds
-            is 19.54%. The chance of a tie, both of you winning exactly 5 rounds, is 0.2138 or 21.38%.
+            is 19.54%. The chance of a tie, both of you winning exactly 5 rounds, is 21.38%.
         </p>
 
         <h2>Enumerating arrangements</h2>
         <p>
-            The solutions are found through enumeration. A form of brute force, but with some thought.
+            The arrangements are found through enumeration. A form of brute force, but with some thought.
         </p>
 
         <p>
             You may be tempted to take the 18 labels, create all possible permutations, and assign
-            positions 1 through 6 to group/die A, 6 through 12 to B, and the remainder to C. Note however that 18! (factorial)
+            positions 1 through 6 to A, 6 through 12 to B, and the remainder to C. Note however that 18! (factorial)
             such permutations exist, a huge number. You'll also end up with many duplicate solutions with swapped labels on the same die.
         </p>
 
@@ -173,7 +173,7 @@
         </p>
 
         <p>
-            We now want all possible <i>permutations</i> of this multiset. Multisets are permutated efficiently using specialized 
+            We want all possible <i>permutations</i> of this multiset. Multisets are permutated efficiently using specialized 
             algorithms. In this case I used Aaron Williams' algorithm<note>Williams, A (2009). Loopless
             generation of multiset permutations using a constant number of variables by prefix shifts. Proceedings of the 2009 
             Annual ACM-SIAM Symposium on Discrete Algorithms (SODA), 987-996.</note>. By using each multiset
@@ -259,14 +259,13 @@ import DiceHeadToHeadTable from './nontransitive-dice/dice-head-to-head-table.vu
 
 const article = ref<ArticleHeader>(articles['nontransitive-dice']!);
 
-const results = ref<number[][][]>();
-const selectedResultIdx = ref(1);
+const arrangements = ref<number[][][]>();
+const selectedArrangement = ref(1);
 
 const selectedResult = computed(() => {
-    if (results.value === undefined) return;
+    if (arrangements.value === undefined) return;
 
-    const validIndex = Math.min(Math.max(1, selectedResultIdx.value), results.value.length);
-    const result = results.value[validIndex - 1]!;
+    const result = arrangements.value[selectedArrangement.value - 1]!;
 
     return {
         a: result[0]!,
@@ -279,7 +278,7 @@ const loadResults = async () => {
     try {
         // Dynamically import the JSON file
         const response: number[][][] = await fetch('/data/nontransitive-dice-results.json').then(r => r.json());
-        results.value = response;
+        arrangements.value = response;
     } catch (error) {
         console.error('Error loading JSON:', error);
     }
