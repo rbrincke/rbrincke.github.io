@@ -108,7 +108,7 @@
             <div class="col">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="arrangement">Arrangement #</span>
-                    <input type="number" :min="1" :max="arrangements.length" v-model="selectedArrangement"  @input="selectedArrangement = Math.min(Math.max(selectedArrangement, 1), arrangements.length)" class="form-control" placeholder="Arrangement number" aria-label="Arrangement number" aria-describedby="arrangement">
+                    <input type="number" :min="1" :max="arrangements.length" v-model="selectedArrangement"  @input="selectedArrangement = selectedArrangement ? Math.min(Math.max(selectedArrangement, 1), arrangements.length) : undefined" class="form-control" aria-label="Arrangement number" aria-describedby="arrangement">
                 </div>
             </div>
         </div>
@@ -150,9 +150,9 @@
             is 19.54%. The chance of a tie, both of you winning exactly 5 rounds, is 21.38%.
         </p>
 
-        <h2>Enumerating arrangements</h2>
+        <h2>Finding all arrangements</h2>
         <p>
-            The arrangements are found through enumeration. A form of brute force, but with some thought.
+            The arrangements are found through enumeration. A form of brute force, but with a few clever tricks.
         </p>
 
         <p>
@@ -163,8 +163,8 @@
 
         <p>
             It is much better to enumerate the number of unique possible <i>groupings</i>, known as combinations. The number of
-            unique possible arrangements equals <Equation expression="{18 \choose 6} {12 \choose 6} {6 \choose 6}"></Equation>, or
-            17,153,136. A lot of work by hand, but no problem for modern computers.
+            unique possible arrangements equals <Equation expression="{18 \choose 6} {12 \choose 6} {6 \choose 6}"></Equation>, or 
+            {{ numberFormatter.format(nChooseK(18, 6) * nChooseK(12, 6) * nChooseK(6, 6)) }}. A lot of work by hand, but no problem for modern computers.
         </p>
 
         <p>
@@ -185,8 +185,8 @@
             The number of solutions can be further reduced by a factor of three. Why? A solution where <Equation
                 expression="A \succ B \succ C \succ A"></Equation> is equivalent to <Equation
                 expression="B \succ C \succ A \succ B"></Equation> if all we have done is relabel the same three dice.
-                To prevent this, anchor the first element (1) to always be in group A. This leaves 5,717,712 possible 
-                solutions to be evaluated.
+                To prevent this, anchor the first element (1) to always be in group A. This leaves <Equation expression="{17 \choose 5} {12 \choose 6} {6 \choose 6}"></Equation> 
+                or {{ numberFormatter.format(nChooseK(17, 5) * nChooseK(12, 6) * nChooseK(6, 6)) }} possible arrangements.
         </p>
 
         <p>
@@ -236,14 +236,14 @@
         <p>
             Like almost everything else in popular mathematics, nontransitive dice were popularized by Martin Gardner in
             his
-            Scientific American column<note>Gardner, M. (1970). The paradox of the nontransitive dice.
-                Scientific American, 223 (Dec. 1970) 110–111.</note>.
+            Scientific American column.<note>Gardner, M. (1970). The paradox of the nontransitive dice.
+                Scientific American, 223 (Dec. 1970) 110–111.</note>
         </p>
 
         <p>
             Many more examples of nontransitive dice exist. The problem here is
-            similar to the problem outlined in the introduction of a paper by Richard Savage<note>Savage, R. P.
-                (1994). The Paradox of Nontransitive Dice. The American Mathematical Monthly, 101(5), 429.</note>.
+            similar to the problem outlined in the introduction of a paper by Richard Savage.<note>Savage, R. P.
+                (1994). The Paradox of Nontransitive Dice. The American Mathematical Monthly, 101(5), 429.</note>
         </p>
     </Article>
 </template>
@@ -260,12 +260,13 @@ import DiceHeadToHeadTable from './nontransitive-dice/dice-head-to-head-table.vu
 const article = ref<ArticleHeader>(articles['nontransitive-dice']!);
 
 const arrangements = ref<number[][][]>();
-const selectedArrangement = ref(1);
+const selectedArrangement = ref<number | undefined>(1);
 
 const selectedResult = computed(() => {
     if (arrangements.value === undefined) return;
 
-    const result = arrangements.value[selectedArrangement.value - 1]!;
+    const selected = selectedArrangement.value ? selectedArrangement.value - 1 : 0;
+    const result = arrangements.value[selected]!;
 
     return {
         a: result[0]!,
@@ -283,6 +284,20 @@ const loadResults = async () => {
         console.error('Error loading JSON:', error);
     }
 };
+
+function factorial(n: number) {
+    let res = 1;
+    for (let i = 1; i <= n; i++) {
+        res *= i;
+    }
+    return res;
+}
+
+function nChooseK(n: number, r: number) {
+    return factorial(n) / (factorial(r) * factorial(n - r));
+}
+
+let numberFormatter = new Intl.NumberFormat('en-US');
 
 loadResults();
 </script>
