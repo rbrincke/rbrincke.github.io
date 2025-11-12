@@ -190,7 +190,7 @@
         </p>
 
         <p>
-            Code to produce the arrangements is found <a href="https://github.com/rbrincke/nontransitive-dice">in
+            Code to produce the arrangements is found <a href="https://github.com/rbrincke/nontransitive-dice" target="_blank">in
                 this GitHub repository</a>.
         </p>
 
@@ -206,7 +206,7 @@
 
         <p>
             Despite the many non-transitive arrangements, the labels (1, 5, 10, 11, 13, 17) for A, (3, 4, 7, 12, 15, 16)
-            for B and (2, 6, 8, 9, 14, 18) for C provide a fair arrangement<note>This is a set of <a href="https://en.wikipedia.org/wiki/Go_First_Dice">Go First
+            for B and (2, 6, 8, 9, 14, 18) for C provide a fair arrangement<note>This is a set of <a href="https://en.wikipedia.org/wiki/Go_First_Dice" target="_blank">Go First
                 Dice</a>.</note> where each die has an 18/36 probability of beating any other.
         </p>
 
