@@ -1,6 +1,6 @@
 <template>
     <table class="dice-table">
-        <caption><Math :expression="`Pr(\\textrm{${columnName} beats ${rowName}}) = \\frac{${wins}}{36}`"></Math></caption>
+        <caption><Math :expression="`Pr(\\textrm{\\textcolor{${columnColor}}{${columnName}} beats \\textcolor{${rowColor}}{${rowName}}}) = \\frac{${wins}}{36}`"></Math></caption>
         <thead>
             <tr>
                 <th></th><th scope="col" v-for="columnValue of column">{{ columnValue }}</th>
