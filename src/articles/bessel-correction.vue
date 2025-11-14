@@ -60,8 +60,8 @@
                 <div class="sample-plot">
                     <SamplesPlot :width="(parent?.clientWidth ?? 500) - 128" :key="key + '-' + idx" :values="s" :domain="bounds" :disable-labels="idx !== (samples.length - 1)" />
                 </div>
-                <div class="sample-number">{{ round(variance0(s)) }}</div>
-                <div class="sample-number">{{ round(variance1(s)) }}</div>
+                <div class="sample-number" :style="[variance0Better[idx] ? { 'text-decoration-line': 'underline', 'text-decoration-color': '#ef3982', 'text-underline-offset' : '2px' } : {}]">{{ round(variance0(s)) }}</div>
+                <div class="sample-number" :style="[variance1Better[idx] ? { 'text-decoration-line': 'underline', 'text-decoration-color': '#ef3982', 'text-underline-offset' : '2px' } : {}]">{{ round(variance1(s)) }}</div>
             </div>
             <div class="sample-row">
                 <div class="sample-plot"></div>
@@ -265,12 +265,20 @@ function makeSample() {
     return Array.from({length: 15}, i => createSample())
 }
 
+const variance0Better = computed(() => {
+    return samples.value.map(e => Math.abs(1 - variance0(e)) < Math.abs(1 - variance1(e)));
+})
+
 const variance0Rate = computed(() => {
-    return samples.value.map(e => Math.abs(1 - variance0(e)) < Math.abs(1 - variance1(e))).filter(Boolean).length;
+    return variance0Better.value.filter(Boolean).length;
+})
+
+const variance1Better = computed(() => {
+    return samples.value.map(e => Math.abs(1 - variance0(e)) > Math.abs(1 - variance1(e)));
 })
 
 const variance1Rate = computed(() => {
-    return samples.value.map(e => Math.abs(1 - variance0(e)) > Math.abs(1 - variance1(e))).filter(Boolean).length;
+    return variance1Better.value.filter(Boolean).length;
 })
 
 const key = ref(0);
