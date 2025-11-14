@@ -6,8 +6,16 @@ import SnakebytesSelf from "./snakebytes-self.vue";
 import SnakebytesEnum from "./snakebytes-enum.vue";
 import SnakebytesTuple from "./snakebytes-tuple.vue";
 import SnakebytesScope from "./snakebytes-scope.vue";
+import BesselCorrection from "./bessel-correction.vue";
 
 export const articles: Record<string, ArticleHeader> = {
+    'bessel-correction': {
+        title: "Bessel correction and numpy's var",
+        date: "2025-11-14",
+        summary: "Why divide by n-1 to estimate sample variance?",
+        tags: ['Mathematics', 'Statistics'],
+        component: BesselCorrection
+    },
     'nontransitive-dice': {
         title: "A game of (non-transitive) dice",
         date: "2023-09-19",
