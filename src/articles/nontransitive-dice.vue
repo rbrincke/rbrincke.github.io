@@ -56,7 +56,7 @@
 
         <p>
             In this naive arrangement, A beats B in 21 out of 36 cases. So far, so good. B in turn beats C in 21 out of 36 cases, but C beats A in only 15 out of 36 cases.
-            A beats B, B beats C, but A also beats C. No die beats die A. In more formal notation, <Equation expression="A \succ B \succ C"></Equation>.<note>Mathematicians call this binary relationship
+            A beats B, B beats C, but A also beats C. No die beats die A. In more formal notation, <Equation>A \succ B \succ C</Equation>.<note>Mathematicians call this binary relationship
             between the elements <i>transitive</i>.</note>
         </p>
 
@@ -75,7 +75,7 @@
         <p>
             Almost certainly you're already familiar with a game that has such a feature. In Rock-Paper-Scissors, Paper beats Rock, Rock beats Scissors, and Scissors beats Paper.
             Imagine Rock-Paper-Scissors, but played sequentially instead of simultaneously. Whatever your opponent chooses, there is a 
-            choice that beats it: <Equation expression="Paper \succ Rock \succ Scissors \succ Paper"></Equation>. This forms a cycle, an infinite loop.<note>Mathematicians call this <i>nontransitive</i> or <i>intransitive</i>.</note>
+            choice that beats it: <Equation>Paper \succ Rock \succ Scissors \succ Paper</Equation>. This forms a cycle, an infinite loop.<note>Mathematicians call this <i>nontransitive</i> or <i>intransitive</i>.</note>
         </p>
 
         <p>
@@ -163,7 +163,7 @@
 
         <p>
             It is much better to enumerate the number of unique possible <i>groupings</i>, known as combinations. The number of
-            unique possible arrangements equals <Equation expression="{18 \choose 6} {12 \choose 6} {6 \choose 6}"></Equation>, or 
+            unique possible arrangements equals <Equation>{18 \choose 6} {12 \choose 6} {6 \choose 6}</Equation>, or 
             {{ numberFormatter.format(nChooseK(18, 6) * nChooseK(12, 6) * nChooseK(6, 6)) }}. A lot of work by hand, but no problem for modern computers.
         </p>
 
@@ -182,10 +182,9 @@
         </p>
 
         <p>
-            The number of solutions can be further reduced by a factor of three. Why? A solution where <Equation
-                expression="A \succ B \succ C \succ A"></Equation> is equivalent to <Equation
-                expression="B \succ C \succ A \succ B"></Equation> if all we have done is relabel the same three dice.
-                To prevent this, anchor the first element (1) to always be in group A. This leaves <Equation expression="{17 \choose 5} {12 \choose 6} {6 \choose 6}"></Equation> 
+            The number of solutions can be further reduced by a factor of three. Why? A solution where <Equation>A \succ B \succ C \succ A</Equation> 
+            is equivalent to <Equation>B \succ C \succ A \succ B</Equation> if all we have done is relabel the same three dice.
+                To prevent this, anchor the first element (1) to always be in group A. This leaves <Equation>{17 \choose 5} {12 \choose 6} {6 \choose 6}</Equation> 
                 or {{ numberFormatter.format(nChooseK(17, 5) * nChooseK(12, 6) * nChooseK(6, 6)) }} possible arrangements.
         </p>
 
