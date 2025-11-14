@@ -1,28 +1,33 @@
 <template>
-    <div class="d3-plot">
+    <div class="d3-plot" ref="parent">
         <svg ref="svgRef"></svg>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import * as d3 from 'd3';
 
 const props = withDefaults(defineProps<{
     values: number[],
     domain: { left: number, right: number },
+    width: number,
     disableLabels: boolean
 }>(), { disableLabels: true });
 
 const svgRef = ref<SVGSVGElement | null>(null);
 
-onMounted(() => {
+function draw() {
     if (!svgRef.value) return;
 
     const height = 20 + (props.disableLabels ? 0 : 10);
 
-    const svg = d3.select(svgRef.value)
-        .attr("width", 600)
+    let svg = d3.select(svgRef.value);
+
+    svg.selectAll('*').remove();
+
+    svg = svg
+        .attr("width", props.width)
         .attr("height", height);
 
     svg.attr("style", "background-color: transparent;");
@@ -30,7 +35,7 @@ onMounted(() => {
     const mean = d3.mean(props.values) || 0;
     const xScale = d3.scaleLinear()
         .domain([props.domain.left || 0, props.domain.right || 0])
-        .range([20, 580]);
+        .range([20, props.width - 20]);
 
     let axis = d3.axisBottom(xScale);
 
@@ -62,7 +67,8 @@ onMounted(() => {
         .attr("y2", 15)
         .attr("stroke", "#ef3982")
         .attr("stroke-width", 2);
-});
-</script>
+}
 
-<style lang="scss" scoped></style>
+onMounted(draw);
+watch(() => props.width, draw);
+</script>

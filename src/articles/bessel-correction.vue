@@ -50,7 +50,7 @@
             estimation method comes closer to the know variance of 1?
         </p>
 
-        <div class="sample-container">
+        <div ref="parent" class="sample-container">
             <div class="sample-row">
                 <div class="sample-plot"></div>
                 <div class="sample-number" style="font-weight: bold;">NumPy</div>
@@ -58,15 +58,15 @@
             </div>
             <div class="sample-row sample-row-hv" v-for="s, idx in samples" :key="idx">
                 <div class="sample-plot">
-                    <SamplesPlot :key="key + '-' + idx" :values="s" :domain="bounds" :disable-labels="idx !== (samples.length - 1)" />
+                    <SamplesPlot :width="(parent?.clientWidth ?? 500) - 128" :key="key + '-' + idx" :values="s" :domain="bounds" :disable-labels="idx !== (samples.length - 1)" />
                 </div>
                 <div class="sample-number">{{ round(variance0(s)) }}</div>
                 <div class="sample-number">{{ round(variance1(s)) }}</div>
             </div>
             <div class="sample-row">
                 <div class="sample-plot"></div>
-                <div class="sample-number" style="font-weight: bold;">{{ round(100 * variance0Rate / samples.length) }}%</div>
-                <div class="sample-number" style="font-weight: bold;">{{ round(100 * variance1Rate / samples.length) }}%</div>
+                <div class="sample-number" style="font-weight: bold;">{{ round(100 * variance0Rate / samples.length, 1) }}%</div>
+                <div class="sample-number" style="font-weight: bold;">{{ round(100 * variance1Rate / samples.length, 1) }}%</div>
             </div>
         </div>
 
@@ -214,7 +214,7 @@
 
 <script setup lang="ts">
 import { type ArticleHeader } from '@/components/header';
-import { computed, ref } from 'vue';
+import { computed, ref, useTemplateRef } from 'vue';
 import { articles } from '@/articles/list';
 import Article from '@/components/article.vue';
 import Equation from '@/components/Equation.vue';
@@ -222,8 +222,9 @@ import { Gaussian } from 'ts-gaussian';
 import SamplesPlot from './bessel-correction/samples-plot.vue';
 import note from '@/components/note.vue';
 
-const article = ref<ArticleHeader>(articles['bessel-correction']!);
+const parent = useTemplateRef('parent');
 
+const article = ref<ArticleHeader>(articles['bessel-correction']!);
 const distribution = new Gaussian(0, 1);
 
 function round(n: number, digits: number = 2) {
