@@ -88,13 +88,15 @@
         </p>
 
         <p>
-            Consider a sample that happens to mostly contain points to the left of the true mean. Now the sample mean will be to the left of the 
+            Consider a sample that happens to mostly contain points falling to the left of the true mean. Now the sample mean will be to the left of the 
             true mean too, and the distance from each point to the mean (squared) will be smaller than the distance (squared) to the the true mean.
-            The sample mean follows the data around, reducing the squared distances.
+            You will likely find an example of this in the samples above. The sample mean follows the data around, reducing those squared distances, so 
+            we get a smaller variance estimate with the sample mean than we would with the true mean.
         </p>
 
         <p>
-            Let's show this mathematically and see where <Equation>n - 1</Equation> makes an appearance, starting with the sum of squared deviations from the mean.<note>This is probably a good moment to mention that the data points here are independent and identically distributed.</note>
+            Dividing the sum of squared deviations by <Equation>n - 1</Equation> rather than <Equation>n</Equation> accounts for this underestimation. Let's show this 
+            mathematically and see where <Equation>n - 1</Equation> makes an appearance, starting with the sum of squared deviations from the mean.<note>This is probably a good moment to mention that the data points here are independent and identically distributed.</note>
         </p>
 
         <p>
@@ -124,7 +126,7 @@
         <p>
             Why does <Equation>m^2</Equation> need to stay in brackets? Because <Equation>m</Equation> is a random variable! 
             We figured that out earlier when the pink bars were all over the place. Express this in terms of mean and variance to
-            make apparent what that implies.
+            make apparent what this implies.
         </p>
 
         <p>
@@ -316,7 +318,7 @@ function generateNext() {
 }
 
 .sample-number {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     text-align: right;
     min-width: 4rem;
     padding-right: 0.5rem;
