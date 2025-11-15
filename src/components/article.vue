@@ -6,7 +6,7 @@
             <font-awesome-icon :icon="['fas', 'calendar-alt']" /> <time :datetime="article.date">{{ article.date }}</time> in <font-awesome-icon :icon="['fas', 'tags']" /> {{ article.tags.join(', ') }}
         </div>
 
-        <div ref="contents"><slot></slot></div>
+        <div><slot></slot></div>
     </div>
 
     <div class="col-xs-12 col-md-4 col-lg-3">
@@ -74,57 +74,53 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.title {
-    font-weight: bold;
-    margin-bottom: 0;
-    font-size: 2rem;
-}
+    .title {
+        font-weight: bold;
+        margin-bottom: 0;
+        font-size: 2rem;
+    }
 
-.meta {
-    font-size: 0.875rem;
-    color: #a9a9b3;
-    margin-bottom: 4rem;
-}
+    .meta {
+        font-size: 0.875rem;
+        color: #a9a9b3;
+        margin-bottom: 4rem;
+    }
 
-.with-sidenotes {
-    padding-right: 200px;
-}
+    .with-sidenotes {
+        padding-right: 200px;
+    }
 
-.table-of-contents {
-    margin-top: 1rem;
-    border-left: 3px solid #f5f5f5;
-    padding-left: 0.5rem;
-}
+    .table-of-contents {
+        margin-top: 1rem;
+        border-left: 3px solid #f5f5f5;
+        padding-left: 0.5rem;
+    }
 
-.table-of-contents ul {
-    text-indent: -0.85rem;
-    padding-left: .8rem;
-    list-style: none;
-    line-height: 1rem;
-    font-size: 0.9rem;
-}
+    .table-of-contents ul {
+        text-indent: -0.85rem;
+        padding-left: .8rem;
+        list-style: none;
+        line-height: 1rem;
+        font-size: 0.9rem;
+    }
 
-*:is(.footer, .table-of-contents) a {
-    text-decoration: none !important;
-    color: #444 !important;
-}
+    *:is(.footer, .table-of-contents) a {
+        text-decoration: none;
+        color: #444;
+    }
 
-*:is(.footer, .table-of-contents) a:hover {
-    color: #2d96bd !important;
-}
+    *:is(.footer, .table-of-contents) a:hover {
+        color: #2d96bd;
+    }
 
-.table-of-contents li {
-    padding-top: 8px;
-    display: list-item;
-}
+    .table-of-contents li {
+        padding-top: 8px;
+        display: list-item;
+    }
 
-.note {
-    font-size: .8rem;
-    line-height: 110%;
-    font-weight: 200;
-}
-
-.note a {
-    color: red !important;
-}
+    .note {
+        font-size: .8rem;
+        line-height: 110%;
+        font-weight: 200;
+    }
 </style>

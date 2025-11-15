@@ -75,7 +75,7 @@
         <p>
             Almost certainly you're already familiar with a game that has such a feature. In Rock-Paper-Scissors, Paper beats Rock, Rock beats Scissors, and Scissors beats Paper.
             Imagine Rock-Paper-Scissors, but played sequentially instead of simultaneously. Whatever your opponent chooses, there is a 
-            choice that beats it: <Equation>Paper \succ Rock \succ Scissors \succ Paper</Equation>. This forms a cycle, an infinite loop.<note>Mathematicians call this <i>nontransitive</i> or <i>intransitive</i>.</note>
+            choice that beats it: <Equation>Paper \succ Rock \succ Scissors \succ Paper</Equation>. This forms a cycle, an infinite loop.<note>Called <i>nontransitive</i> or <i>intransitive</i>.</note>
         </p>
 
         <p>

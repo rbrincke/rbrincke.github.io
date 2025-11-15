@@ -14,6 +14,7 @@ import 'highlight.js/lib/common';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
+import { faAddressCard } from '@fortawesome/free-solid-svg-icons/faAddressCard';
 
 library.add(faHouse);
 library.add(faTags);
@@ -21,6 +22,7 @@ library.add(faCalendarAlt);
 library.add(faCopy);
 library.add(faCheck);
 library.add(faMinus);
+library.add(faAddressCard)
 
 const app = createApp(App)
 
