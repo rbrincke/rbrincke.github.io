@@ -47,7 +47,7 @@
 
         <p>
             Now, we know we're sampling from a distribution with mean 0 and variance 1. Click <code @click="generateNext()" class="code-link">next sample</code> a few times. Which
-            estimation method comes closer to the know variance of 1?
+            estimate comes closer to the known variance of 1?
         </p>
 
         <div ref="parent" class="sample-container">
@@ -78,8 +78,8 @@
         <h2>Estimating two things at once</h2>
 
         <p>
-            Let's forget about variance for a moment and instead focus on the mean. Look at the pink lines in the figures. We know we're sampling from 
-            a distribution with a mean of zero. Are the means where they need to be?
+            Forget about variance for a moment and instead focus on the mean. Look at the pink lines in the figures. We know we're sampling from 
+            a distribution with a mean of zero. Are the means in the right places?
         </p>
 
         <p>
@@ -88,20 +88,26 @@
         </p>
 
         <p>
-            Consider what happens if the sample happens to mostly contain points to the left of the true mean. Now the sample mean itself will be to the left of the 
-            true mean too, and the distance from each point to the mean (squared) will be smaller than it would have been for the true mean.
+            Consider a sample that happens to mostly contain points to the left of the true mean. Now the sample mean will be to the left of the 
+            true mean too, and the distance from each point to the mean (squared) will be smaller than the distance (squared) to the the true mean.
+            The sample mean follows the data around, reducing the squared distances.
         </p>
 
         <p>
-            Let's show this mathematically, starting with the sum of squared deviations from the mean.
+            Let's show this mathematically and see where <Equation>n - 1</Equation> makes an appearance, starting with the sum of squared deviations from the mean.<note>This is probably a good moment to mention that the data points here are independent and identically distributed.</note>
         </p>
 
         <p>
-            <Equation class="indent">\text{SSD}(X) = \Sigma_i (X_i - \frac{1}{n}\Sigma_i X_i)^2 = \Sigma_i (X_i - m)^2</Equation>
+            <Equation class="indent">
+                \begin{aligned}
+                \text{SSD}(X) &= \Sigma_i (X_i - m)^2 \\
+                            m &= \frac{1}{n}\Sigma_i X_i
+                \end{aligned}
+            </Equation>
         </p>
 
         <p>
-            Take its expected value and simplify.
+            Take its expected value, and simplify.
         </p>
 
         <p>
@@ -116,45 +122,38 @@
         </p>
 
         <p>
-            First up, the second term. Why does <Equation>m</Equation> need to stay in there? Because it's a random variable! Express this in terms of variance to
-            make that apparent.
+            Why does <Equation>m^2</Equation> need to stay in brackets? Because <Equation>m</Equation> is a random variable! 
+            We figured that out earlier when the pink bars were all over the place. Express this in terms of mean and variance to
+            make apparent what that implies.
         </p>
 
         <p>
             <Equation class="indent">
             \begin{aligned}
-                \text{Var}(m) &= \text{E}[(m - \text{E}[m])^2] \\
+                \text{Var}(m) &= \text{E}[(m - \text{E}[m])^2] && \text{definition of variance} \\
                               &= \text{E}[m^2] - \text{E}[m]^2 \\
+                \text{E}[m^2] &= \text{Var}(m) + \text{E}[m]^2 && \text{rearrange} \\
             \end{aligned}
             </Equation>
         </p>
 
         <p>
-            Rearranging this shows that <Equation>m</Equation> itself has variance. Of course, we already figured that out earlier because 
-            the pink bars were all over the place.
-        </p>
-
-        <p>
-            <Equation class="indent">\text{E}[m^2] = \text{Var}(m) + \text{E}[m]^2</Equation>
-        </p>
-
-        <p>
-            We really want to express this in terms of <Equation>X</Equation> and can do so by remembering that <Equation>m = \frac{1}{n}\Sigma_i X_i</Equation>.<note>This is probably a good moment to mention that the data points here are independent and identically distributed.</note>
+            Therefore, that term itself has variance. We actually want to express this in terms of <Equation>X</Equation>.
         </p>
 
         <p>
             <Equation class="indent">
             \begin{aligned}
                 \text{E}[m^2] &= \text{Var}(m) + \text{E}[m]^2 \\
-                              &= \text{Var}(\frac{1}{n}\Sigma_i X_i) + \text{E}[\frac{1}{n}\Sigma_i X_i]^2 \\
-                              &= \frac{1}{n^2}\text{Var}(\Sigma_i X_i) + \text{E}[X]^2 \\
-                              &= \frac{1}{n}\text{Var}(X) + \text{E}[X]^2
+                              &= \text{Var}(\frac{1}{n}\Sigma_i X_i) + \text{E}[\frac{1}{n}\Sigma_i X_i]^2 && \text{because}\, m = \frac{1}{n}\Sigma_i X_i \\
+                              &= \frac{1}{n^2}\text{Var}(\Sigma_i X_i) + \frac{1}{n}\text{E}[\Sigma_i X_i]^2 \\
+                              &= \frac{1}{n}\text{Var}(X) + \text{E}[X]^2 && \text{linearity}
             \end{aligned}
             </Equation>
         </p>
 
         <p>
-            Now focus on the first term <Equation>\text{E}[X^2]</Equation>. Again, express it in terms of variance.
+            That takes care of <Equation>\text{E}\left[m^2\right]</Equation>, but the sum of squared deviations had another term <Equation>\text{E}[X^2]</Equation>. Again, express it in terms its variance.
         </p>
 
         <p>
@@ -162,13 +161,14 @@
         </p>
 
         <p>
-            Let's combine all of these terms.
+            Let's combine everything we have figured out.
         </p>
 
         <p>
             <Equation class="indent">
             \begin{aligned}
-                n \text{E}\left[X^2\right] - n \text{E}\left[m^2\right] &= n \left(\text{Var}(X) + \text{E}[X]^2\right) - n (\frac{1}{n}\text{Var}(X) + \text{E}[X]^2) \\
+                E\left[SSD(X) \right] &= n \text{E}\left[X^2\right] - n \text{E}\left[m^2\right] \\
+                 &= n \left(\text{Var}(X) + \text{E}[X]^2\right) - n (\frac{1}{n}\text{Var}(X) + \text{E}[X]^2) \\
                                                                         &= n \text{Var}(X) +  n \text{E}[X]^2 - n \frac{1}{n}\text{Var}(X) - n \text{E}[X]^2 \\
                                                                         &= (n - 1) \text{Var}(X)
             \end{aligned}
@@ -186,7 +186,8 @@
 
         <p>
             So what's NumPy up to? Well, say that your <Equation>X_i</Equation>'s aren't just a sample, but it's all there is. Now
-            the estimated mean is the true mean simply because you have all the values: the entire population. In that case, divide by <Equation>n</Equation>.
+            the estimated mean is the true mean, simply because you have all the values: the mean of the entire population. In that case, 
+            divide by <Equation>n</Equation>.
         </p>
 
         <h2>Degrees of freedom</h2>
@@ -201,13 +202,13 @@
         </p>
 
         <p>
-            The mean dictates that <Equation>x = 10</Equation>. There is no room or <i>freedom</i> for it to be anything else. You only 
-            need <Equation>n - 1</Equation> values and the last value is known.
+            The mean imposes a constraint that dictates that <Equation>x = 10</Equation>. There is no room or <i>freedom</i> for it to be anything else. You only 
+            need <Equation>n - 1</Equation> values and the last value follows.
         </p>
 
         <p>
             And of course, NumPy is a serious library that has been around forever. By doing <code>np.var(data, ddof=1)</code>, where <code>ddof</code> 
-            means delta degrees of freedom, you're going to get Pandas' answer too. It really just is an unfortunate default.
+            means delta degrees of freedom, you're going to get Pandas' answer too. It really just is an unfortunate default setting.
         </p>
     </Article>
 </template>
