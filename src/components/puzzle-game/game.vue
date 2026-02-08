@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-4">
                         <select v-model.number="level" @change="changeLevel(level)" class="level-select">
-                            <option v-for="l in 5" :key="l" :value="l">{{ l }}</option>
+                            <option v-for="l in 8" :key="l" :value="l">{{ l }}</option>
                         </select>
                     </div>
                     <div class="col-4">{{ mistakes }}</div>
@@ -23,7 +23,7 @@
 
         <div class="row">
             <div class="col-6 col-right">
-                <div class="puzzle-board" :style="boardStyle">
+                <div ref="half-puzzle-board" class="puzzle-board" :style="boardStyle">
                     <template v-for="(piece, idx) in board" :key="idx">
                         <div class="puzzle-piece" @click="drop(piece, idx)" :class="{ correct: solution[idx] === board[idx], error: incorrectIndex === idx }" :style="[pieceStyle, solution[idx] !== null ? getTileBackgroundStyle(solution[idx]) : {}]">
                         </div>
@@ -44,13 +44,10 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onMounted, onUnmounted } from 'vue';
-
-const puzzleImageUrl = '/puzzle-game/house.jpeg';
+import { computed, ref, onMounted, onUnmounted, useTemplateRef, watchEffect } from 'vue';
 
 const level = ref(1);
 const size = computed(() => level.value + 1);
-const sizePx = computed(() => (96 * 4) / size.value);
 const n = computed(() => size.value * size.value);
 const board = computed(() => [...new Array(n.value).keys()]);
 const pieces = computed(() => shuffle([...new Array(n.value).keys()]));
@@ -59,17 +56,54 @@ const selected = ref<number | undefined>(undefined);
 const solution = ref(new Array(n.value).fill(null));
 const incorrectIndex = ref<number | undefined>(undefined);
 
+const refPuzzleBoard = useTemplateRef('half-puzzle-board');
+
+const sizePx = ref(384 * (2/3));
+
+const calculateSizePx = () => {
+  const boardWidth = refPuzzleBoard.value?.clientWidth;
+  const actualBoardWidth = boardWidth ? boardWidth - 16 - size.value * 3 : undefined; // Subtract padding and gaps.
+  return (actualBoardWidth ?? 384) * (2/3) / size.value;
+};
+
+// Recalculate sizePx whenever dependencies change
+watchEffect(() => {
+  sizePx.value = calculateSizePx();
+});
+
 const mistakes = ref(0);
 
 const imageData = ref<{ width: number; height: number; tileWidth: number; tileHeight: number } | null>(null);
 
+let resizeObserver = new ResizeObserver(() => {
+    requestAnimationFrame(() => {
+        sizePx.value = calculateSizePx();
+    });
+});
+
+// Load the URL to find out which puzzle to load and which level.
+const urlParams = new URLSearchParams(window.location.search);
+const puzzleImageName = urlParams.get('puzzle') ?? 'house';
+const puzzleImageUrl = `/puzzle-game/${puzzleImageName}.jpeg`
+
 onMounted(async () => {
+    if (refPuzzleBoard.value) {
+        resizeObserver.observe(refPuzzleBoard.value);
+    }
+
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+
     img.onload = () => {
         imageData.value = { width: img.width, height: img.height, tileWidth: img.width / size.value, tileHeight: img.height / size.value };
     };
-    img.src = puzzleImageUrl;
+
+    img.src = `/puzzle-game/${puzzleImageName}.jpeg`;
+});
+
+onUnmounted(() => {
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+  }
 });
 
 function getTileBackgroundStyle(tileIndex: number) {
@@ -153,13 +187,13 @@ function shuffle(array: number[]): number[] {
 
 const boardStyle = computed<any>(() => ({
     display: 'grid',
+    width: '100%',
     gridTemplateColumns: `repeat(${size.value}, ${sizePx.value * 1.5}px)`,
     background: '#fff',
     padding: '8px',
     borderRadius: '10px',
     boxShadow: '0 2px 8px #0001',
     gap: '3px 5px',
-    width: 'max-content',
     position: 'relative',
 }));
 
