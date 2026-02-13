@@ -10,9 +10,9 @@ import BesselCorrection from "./bessel-correction.vue";
 
 export const articles: Record<string, ArticleHeader> = {
     'bessel-correction': {
-        title: "Bessel correction and numpy's var",
+        title: "Why divide by n-1 for sample variance?",
         date: "2025-11-14",
-        summary: "Why divide by n-1 to estimate sample variance?",
+        summary: "About the Bessel correction and numpy's default behavior for sample variance.",
         tags: ['Mathematics', 'Statistics'],
         component: BesselCorrection
     },

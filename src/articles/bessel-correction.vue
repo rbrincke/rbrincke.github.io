@@ -1,53 +1,41 @@
 <template>
     <Article :article="article">
         <p>
-            It's Monday morning and you're excited about a brand new dataset. Like everyone else these days,
-            you break out Python. You're curious about the variance and use NumPy's <code>np.var(data)</code>.
+            Like everyone else these days, you'd break out Python to calculate things. Say you're curious about a data set's variance and use NumPy's <code>np.var(data)</code>.
             A moment later you try Pandas' <code>pd.Series(data).var()</code> and you get a different answer.
             What gives?
         </p>
 
         <p>
-            It turns out that NumPy's default calculates the population variance, whereas Pandas, arguably more
-            helpfully, calculates the sample variance.
+            It turns out that NumPy's default calculates the population variance, whereas Pandas, arguably more helpfully, calculates the sample variance.
+        </p>
+
+        <p>
+            The justification that I've heard more than once is a hand-wavy "statisticians divide by n-1". I think the actual explanation is actually quite intuitive.
         </p>
 
         <h2>A tale of two estimated variances</h2>
 
         <p>
-            Variance is the expected value of the mean squared difference from the mean.
+            Variance measures how spread out a distribution is. It takes each data point, finds its distance from the mean, and squares it. Sum it all up, and we have the sum of squared deviations. But this sum grows with the number of data points. To fix that, we have to choose what to divide it by, and this is where NumPy and Pandas choose differently.
         </p>
 
         <p>
-            <Equation class="indent">\text{Var}(X) = \text{E}[(X - \text{E}[X])^2]</Equation>
+            First, I'll try to convince you that Pandas' estimate is often more accurate.
         </p>
 
         <p>
-            Let's use real numbers for an intuitive understanding of what NumPy and Pandas calculate. We'll randomly
-            sample from a normal distribution with mean 0 and variance 1.
+            I'll randomly sample from a standard normal distribution, drawing fifteen samples of ten points each, mostly because that fits on my screen. Draws are shown in blue, the mean is pink.
         </p>
 
         <p>
-            NumPy and Pandas both calculate the sum of squared deviations, where <Equation>X_i</Equation> is a single value and <Equation>m = \frac{1}{n} \Sigma_i X_i</Equation> is the mean of all
-            values. In the figures below, this is the distance between each blue dot and the pink mean, squared, and then added up.
+            Now, the distribution I'm sampling from has a mean of 0 and a variance of 1: you already know the correct estimate is 1. The estimated 
+            variance for each method is shown to the right of each figure, and the estimate closest to the true variance is underlined. The percentages at the bottom show how often each method wins.
         </p>
 
         <p>
-            <Equation class="indent">\text{SSD}(X) = \Sigma _i (X_i - m)^2</Equation>
-        </p>
-
-        <p>
-            NumPy divides this by <Equation>n</Equation> whereas Pandas divides it by <Equation>n - 1</Equation>.
-        </p>
-
-        <p>
-            We'll draw fifteen samples of ten points each, mostly because that fits on the average screen. Draws are shown in blue, the mean is pink. The estimated 
-            variance is shown to the right of each figure, with the share of all samples closer to the true variance of 1 at the bottom.
-        </p>
-
-        <p>
-            Now, we know we're sampling from a distribution with mean 0 and variance 1. Click <code @click="generateNext()" class="code-link">next sample</code> a few times. Which
-            estimate comes closer to the known variance of 1?
+            Click <code @click="generateNext()" class="code-link">next sample</code> a few times. Which
+            estimate comes closer to the known true variance of 1?
         </p>
 
         <div ref="parent" class="sample-container">
@@ -78,25 +66,42 @@
         <h2>Estimating two things at once</h2>
 
         <p>
-            Forget about variance for a moment and instead focus on the mean. Look at the pink lines in the figures. We know we're sampling from 
+            Forget about variance for a moment and instead focus on the mean. Look at the pink lines in the figures. You know I'm sampling from 
             a distribution with a mean of zero. Are the means in the right places?
         </p>
 
         <p>
-            Mostly, they are not, and this matters. Variance is the squared difference <b>from the mean</b>. Ah, but we don't know the true mean. We had 
+            Mostly, they are not, and this matters. Variance is the squared difference <b>from the mean</b>. Ah, but I don't know the true mean. I had 
             to estimate it from the data too, and some of these estimates are not all that great.
         </p>
 
         <p>
-            Consider a sample that happens to mostly contain points falling to the left of the true mean. Now the sample mean will be to the left of the 
-            true mean too, and the distance from each point to the mean (squared) will be smaller than the distance (squared) to the the true mean.
-            You will likely find an example of this in the samples above. The sample mean follows the data around, reducing those squared distances, so 
-            we get a smaller variance estimate with the sample mean than we would with the true mean.
+            Consider a sample that happens to mostly contain points falling to the left of the true mean of 0. Now the sample mean will be to the left of the 
+            true mean too, and the distance from each point to the estimated mean will be smaller than the distance to the the true mean.
+            You will likely find an example of this in the samples above. If not, generate a few more samples. Note how the sample mean sort of follows the data around, thereby reducing those squared distances, resulting in a smaller variance estimate with the sample mean than I would get had I used the true mean.
         </p>
 
         <p>
-            Dividing the sum of squared deviations by <Equation>n - 1</Equation> rather than <Equation>n</Equation> accounts for this underestimation. Let's show this 
-            mathematically and see where <Equation>n - 1</Equation> makes an appearance, starting with the sum of squared deviations from the mean.<note>This is probably a good moment to mention that the data points here are independent and identically distributed.</note>
+            Dividing the sum of squared deviations by <Equation>n - 1</Equation> rather than <Equation>n</Equation> accounts for this underestimation. Sometimes this is called Bessel's correction. 
+        </p>
+
+        <h2>Deriving n-1</h2>
+
+        <p>
+            Hopefully the intuition is clear by now. But even though I may have convinced you there is an underestimation problem, you may still be wondering why the correction is exactly <Equation>n - 1</Equation> and not something else altogether.
+        </p>
+
+        <p>
+            Packed into a formula, variance is the expected value of the squared distance from the mean.
+        </p>
+
+        <p>
+            <Equation class="indent">\text{Var}(X) = \text{E}[(X - \text{E}[X])^2]</Equation>
+        </p>
+
+        <p>
+            I want to show 
+            mathematically where <Equation>n - 1</Equation> makes an appearance when estimating this expected value, starting with the sum of squared deviations from the mean.<note>This is probably the moment to mention that the data points here are independent and identically distributed.</note> You see I am estimating two things using the same data.
         </p>
 
         <p>
@@ -125,7 +130,7 @@
 
         <p>
             Why does <Equation>m^2</Equation> need to stay in brackets? Because <Equation>m</Equation> is a random variable! 
-            We figured that out earlier when the pink bars were all over the place. Express this in terms of mean and variance to
+            You figured that out earlier when the pink bars were all over the place. Express this in terms of mean and variance to
             make apparent what this implies.
         </p>
 
@@ -140,7 +145,7 @@
         </p>
 
         <p>
-            Therefore, that term itself has variance. We actually want to express this in terms of <Equation>X</Equation>.
+            Therefore, the estimated mean itself has variance. We actually want to express everything in terms of <Equation>X</Equation>, so do that next.
         </p>
 
         <p>
