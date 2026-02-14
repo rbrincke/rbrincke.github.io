@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-4">
                         <select v-model.number="level" @change="changeLevel(level)" class="level-select">
-                            <option v-for="l in 8" :key="l" :value="l">{{ l }}</option>
+                            <option v-for="_level in 8" :key="_level" :value="_level">{{ _level }}</option>
                         </select>
                     </div>
                     <div class="col-4">{{ mistakes }}</div>
@@ -25,8 +25,11 @@
             <div class="col-6 col-right">
                 <div ref="half-puzzle-board" class="puzzle-board" :style="boardStyle">
                     <template v-for="(piece, idx) in board" :key="idx">
-                        <div class="puzzle-piece" @click="drop(piece, idx)" :class="{ correct: solution[idx] === board[idx], error: incorrectIndex === idx }" :style="[pieceStyle, solution[idx] !== null ? getTileBackgroundStyle(solution[idx]) : {}]">
-                        </div>
+                        <div class="puzzle-piece" 
+                            @click="dropPiece(piece, idx)"
+                            :class="{ correct: solution[idx] === board[idx], error: incorrectIndex === idx }"
+                            :style="[pieceStyle, solution[idx] !== null ? tile(solution[idx]) : {}]"
+                        />
                     </template>
                 </div>
             </div>
@@ -34,8 +37,11 @@
             <div class="col-6">
                 <div class="puzzle-board" :style="boardStyle">
                     <template v-for="(piece, idx) in pieces" :key="idx">
-                        <div class="puzzle-piece" :class="{ selected: piece === selected, disabled: solution.includes(piece) }" @click="select(piece)" :style="[pieceStyle, getTileBackgroundStyle(piece)]">
-                        </div>
+                        <div class="puzzle-piece"
+                            :class="{ selected: piece === selected, disabled: solution.includes(piece) }"
+                            @click="selectPiece(piece)" 
+                            :style="[pieceStyle, tile(piece)]" 
+                        />
                     </template>
                 </div>
             </div>
@@ -45,6 +51,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, onMounted, onUnmounted, useTemplateRef, watchEffect } from 'vue';
+import { formatTime, shuffle } from '@/components/puzzle-game/tools';
 
 const level = ref(1);
 const size = computed(() => level.value + 1);
@@ -52,39 +59,46 @@ const n = computed(() => size.value * size.value);
 const board = computed(() => [...new Array(n.value).keys()]);
 const pieces = computed(() => shuffle([...new Array(n.value).keys()]));
 
+const mistakes = ref(0);
+
 const selected = ref<number | undefined>(undefined);
 const solution = ref(new Array(n.value).fill(null));
 const incorrectIndex = ref<number | undefined>(undefined);
 
 const refPuzzleBoard = useTemplateRef('half-puzzle-board');
 
-const sizePx = ref(384 * (2/3));
+const aspectRatio = 1.5;
+const padding = 8;
+const horizontalGap = 3;
+const fallbackTileWidth = 384;
+const tileHeight = ref(fallbackTileWidth / aspectRatio);
 
 const calculateSizePx = () => {
   const boardWidth = refPuzzleBoard.value?.clientWidth;
-  const actualBoardWidth = boardWidth ? boardWidth - 16 - size.value * 3 : undefined; // Subtract padding and gaps.
-  return (actualBoardWidth ?? 384) * (2/3) / size.value;
+  const actualBoardWidth = boardWidth ? boardWidth - (2 * padding) - size.value * horizontalGap : undefined;
+
+  return (actualBoardWidth ?? fallbackTileWidth) / aspectRatio / size.value;
 };
 
 // Recalculate sizePx whenever dependencies change
 watchEffect(() => {
-  sizePx.value = calculateSizePx();
+  tileHeight.value = calculateSizePx();
 });
-
-const mistakes = ref(0);
 
 const imageData = ref<{ width: number; height: number; tileWidth: number; tileHeight: number } | null>(null);
 
 let resizeObserver = new ResizeObserver(() => {
     requestAnimationFrame(() => {
-        sizePx.value = calculateSizePx();
+        tileHeight.value = calculateSizePx();
     });
 });
 
 // Load the URL to find out which puzzle to load and which level.
-const urlParams = new URLSearchParams(window.location.search);
-const puzzleImageName = urlParams.get('puzzle') ?? 'house';
-const puzzleImageUrl = `/puzzle-game/${puzzleImageName}.jpeg`
+function puzzleImageURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const puzzleImageName = urlParams.get('puzzle') ?? 'house';
+    return `/puzzle-game/${puzzleImageName}.jpeg`;
+}
 
 onMounted(async () => {
     if (refPuzzleBoard.value) {
@@ -97,114 +111,16 @@ onMounted(async () => {
         imageData.value = { width: img.width, height: img.height, tileWidth: img.width / size.value, tileHeight: img.height / size.value };
     };
 
-    img.src = `/puzzle-game/${puzzleImageName}.jpeg`;
+    img.src = puzzleImageURL();
 });
 
 onUnmounted(() => {
-  if (resizeObserver) {
-    resizeObserver.disconnect();
-  }
+    if (resizeObserver) {
+        resizeObserver.disconnect();
+    }
 });
 
-function getTileBackgroundStyle(tileIndex: number) {
-    if (!imageData.value || tileIndex === -1) {
-        return {};
-    };
-
-    const col = tileIndex % size.value;
-    const row = Math.floor(tileIndex / size.value);
-    const pieceW = sizePx.value * 1.5;
-    const pieceH = sizePx.value;
-    const totalW = pieceW * size.value;
-    const totalH = pieceH * size.value;
-    const offsetX = col * pieceW;
-    const offsetY = row * pieceH;
-
-    return {
-        backgroundImage: `url('${puzzleImageUrl}')`,
-        backgroundPosition: `${-offsetX}px ${-offsetY}px`,
-        backgroundSize: `${totalW}px ${totalH}px`,
-        backgroundRepeat: 'no-repeat',
-    };
-}
-
-function changeLevel(newLevel: number) {
-    level.value = newLevel;
-    solution.value = new Array(n.value).fill(null);
-    selected.value = undefined;
-    mistakes.value = 0;
-    start.value = undefined;
-}
-
-function select(piece: number) {
-    if (solution.value.includes(piece)) {
-        return;
-    }
-
-    startClock();
-    selected.value = piece;
-}
-
-function drop(piece: number, idx: number) {
-    if (selected.value === undefined) {
-        return;
-    }
-
-    if (selected.value === piece) {
-        solution.value[idx] = selected.value;
-        selected.value = undefined;
-
-        // If the solution array is completely filled, the puzzle is complete.
-        // This is because we only ever accept correct placements.
-        if (solution.value.every(val => val !== null)) {
-            stopClock();
-        }
-    } else {
-        mistakes.value++;
-
-        incorrectIndex.value = idx;
-        setTimeout(() => {
-            incorrectIndex.value = undefined;
-        }, 500);
-    }
-}
-
-function shuffle(array: number[]): number[] {
-    let currentIndex = array.length;
-    let result: Array<number> = array.slice(0);
-
-    while (currentIndex != 0) {
-        // Pick a remaining element.
-        let randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        // And swap it with the current element.
-        [result[currentIndex], result[randomIndex]] = [result[randomIndex]!, result[currentIndex]!];
-    }
-
-    return result;
-}
-
-const boardStyle = computed<any>(() => ({
-    display: 'grid',
-    width: '100%',
-    gridTemplateColumns: `repeat(${size.value}, ${sizePx.value * 1.5}px)`,
-    background: '#fff',
-    padding: '8px',
-    borderRadius: '10px',
-    boxShadow: '0 2px 8px #0001',
-    gap: '3px 5px',
-    position: 'relative',
-}));
-
-const pieceStyle = computed<any>(() => ({
-    width: `${sizePx.value * 1.5}px`,
-    height: `${sizePx.value}px`,
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
-
+// Timing logic.
 const start = ref<number | undefined>(undefined);
 const stop = ref<number | undefined>(undefined);
 const now = ref<number>(Date.now());
@@ -249,20 +165,96 @@ const time = computed(() => {
     const endTime = stop.value ?? now.value;
 
     return (endTime - start.value) / 1000;
-})
+});
 
-const formattedTime = computed(() => {
-    if (time.value === undefined) {
-        return '0:00.000';
+const formattedTime = computed(() => formatTime(time.value));
+
+function reset() {
+    solution.value = new Array(n.value).fill(null);
+    selected.value = undefined;
+    mistakes.value = 0;
+    start.value = undefined;
+}
+
+function changeLevel(newLevel: number) {
+    level.value = newLevel;
+    reset();
+}
+
+function selectPiece(piece: number) {
+    if (solution.value.includes(piece)) {
+        return;
     }
 
-    const timePerMistake = 5000;
-    
-    return time 
-        ? new Date(time.value * 1000 + mistakes.value * timePerMistake).toISOString().substring(14, 23) 
-        : '0:00.000'
-        ;
-})
+    startClock();
+    selected.value = piece;
+}
+
+function dropPiece(piece: number, idx: number) {
+    if (selected.value === undefined) {
+        return;
+    }
+
+    if (selected.value === piece) {
+        solution.value[idx] = selected.value;
+        selected.value = undefined;
+
+        // If the solution array is completely filled, the puzzle is complete.
+        // This is because we only ever accept correct placements.
+        if (solution.value.every(val => val !== null)) {
+            stopClock();
+        }
+    } else {
+        mistakes.value++;
+
+        incorrectIndex.value = idx;
+        setTimeout(() => {
+            incorrectIndex.value = undefined;
+        }, 500);
+    }
+}
+
+function tile(tileIndex: number) {
+    if (!imageData.value || tileIndex === -1) {
+        return {};
+    };
+
+    const col = tileIndex % size.value;
+    const row = Math.floor(tileIndex / size.value);
+    const pieceW = tileHeight.value * aspectRatio;
+    const pieceH = tileHeight.value;
+    const totalW = pieceW * size.value;
+    const totalH = pieceH * size.value;
+    const offsetX = col * pieceW;
+    const offsetY = row * pieceH;
+
+    return {
+        backgroundImage: `url('${puzzleImageURL()}')`,
+        backgroundPosition: `${-offsetX}px ${-offsetY}px`,
+        backgroundSize: `${totalW}px ${totalH}px`,
+        backgroundRepeat: 'no-repeat',
+    };
+}
+
+const boardStyle = computed<any>(() => ({
+    display: 'grid',
+    width: '100%',
+    gridTemplateColumns: `repeat(${size.value}, ${tileHeight.value * aspectRatio}px)`,
+    background: '#fff',
+    padding: `${padding}px`,
+    borderRadius: '10px',
+    boxShadow: '0 2px 8px #0001',
+    gap: `${horizontalGap}px 5px`,
+    position: 'relative',
+}));
+
+const pieceStyle = computed<any>(() => ({
+    width: `${tileHeight.value * aspectRatio}px`,
+    height: `${tileHeight.value}px`,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
 </script>
 
 <style lang="scss" scoped>
