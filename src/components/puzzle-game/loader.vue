@@ -23,6 +23,9 @@ const puzzles = [
     {
         id: 2, name: "Liam's House", imageUrl: '/puzzle-game/house.jpeg'
     },
+    {
+        id: 3, name: "Zoe's Cat", imageUrl: '/puzzle-game/zoe-cat.jpeg'
+    }
 ]
 </script>
 
