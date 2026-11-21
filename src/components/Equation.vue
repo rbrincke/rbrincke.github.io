@@ -1,9 +1,10 @@
 <template>
-    <span
+    <component
+        :is="indented ? 'div' : 'span'"
         ref="equationContainer"
         class="equation"
         :class="{ 'equation-indent': indented }"
-    ></span>
+    ></component>
 </template>
 
 <script lang="ts" setup>
@@ -57,16 +58,21 @@ watch([() => props.expression, indented], renderMath);
 
 <style scoped>
     .equation {
-        font-size: 1.03em;
-        vertical-align: 0;
+        font-size: 1em;
+        line-height: 1.15;
+        white-space: nowrap;
     }
 
     .equation-indent {
         display: block;
-        margin: 1rem 0 1rem 1.5rem;
+        margin: 1.5rem 0;
+        padding: .95rem 1rem .75rem 1rem;
+        border-left: 2px solid #dfeaed;
+        background: #fafcfc;
         text-align: left;
         overflow-x: auto;
         overflow-y: hidden;
+        /* white-space: normal; */
     }
 
     .equation-indent :deep(.katex) {

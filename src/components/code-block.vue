@@ -50,6 +50,8 @@ function copy() {
 .code-block {
     display: block;
     position: relative;
+        border-left: 2px solid #dfeaed;
+        background: #fafcfc !important;
 }
 
 .code-copy {

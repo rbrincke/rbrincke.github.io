@@ -9,41 +9,34 @@
             the population variance, whereas Pandas, arguably more helpfully, calculates the sample variance.
         </p>
 
-        <p>
-            You have probably heard that <i>statisticians divide by n-1</i>, now let's explore why.
-        </p>
-
         <h2>A tale of two estimated variances</h2>
 
         <p>
-            Variance measures how spread out a distribution is. Take each data point, find its distance from the mean, and square it. Now sum it all up, and you have the sum of squared deviations:
+            Variance measures how spread out your data is. Take each data point, find its distance from the mean, and square it. Sum it all up, and you have the sum of squared deviations:
         </p>
         
+        <Equation class="indent">
+            \begin{aligned}
+            \operatorname{SSD}(X) &= \Sigma_i (X_i - m)^2
+            \end{aligned}
+        </Equation>
+
         <p>
-            <Equation class="indent">
-                \begin{aligned}
-                \text{SSD}(X) &= \Sigma_i (X_i - m)^2
-                \end{aligned}
-            </Equation>
+            This sum grows with the number of data points, making it very awkward to compare between datasets unless they are of exactly the same size. A remedy is to divide it by something, and this is where NumPy and Pandas choose differently: NumPy divides by <Equation>n</Equation>, whereas Pandas divides by <Equation>n-1</Equation>.
         </p>
 
         <p>
-            This sum grows with the number of data points, making it very awkward to compare between datasets unless they are of the same size. A remedy is to divide it by something, and this is where NumPy and Pandas choose differently: NumPy divides by <Equation>n</Equation>, whereas Pandas divides by <Equation>n-1</Equation>.
+            I will use an example to convince you that Pandas' estimate of variance is usually more accurate for the data sets you are likely to work with.
         </p>
 
         <p>
-            I will try to convince you that Pandas' estimate of variance is usually more accurate for the data sets you are likely to work with.
-        </p>
-
-        <p>
-            Let me randomly sample from a standard normal distribution. A standard normal distribution has a mean of 0 and a variance of 1, so you know 
-            the correct estimate is 1.
+            Let me randomly sample from a standard normal distribution. A standard normal distribution has a mean of 0 and a variance of 1. The correct estimate is therefore definitely 1.
         </p>
 
         <p>
             I will draw fifteen samples of ten points each. Each row is a sample, each draw is a blue dot, and the mean is a pink bar.
             Next to each sample, I show the variance estimate from NumPy and Pandas. Whichever estimate is closest to the true variance of 1 is highlighted.
-            At the bottom, I show how often a method was closer.
+            At the bottom you find the percentage of the time each method was closer.
         </p>
 
         <p class="experiment-question">Which method wins?</p>
@@ -85,70 +78,65 @@
             does a better job. Chance dictates that NumPy will occasionally do better, but mostly it won't.
         </p>
 
-        <h2>Estimating two things at once</h2>
+        <h2>Estimating two things at once gets us into trouble</h2>
 
         <p>
-            Forget about variance for a moment and instead focus on the mean. Look at the pink lines in the figures. You know I'm sampling from 
+            Forget about variance for a moment and focus on the mean. Look at the pink lines in the figures. I said I'm sampling from 
             a distribution with a mean of zero. Are the means in the right places?
         </p>
 
         <p>
-            Mostly, they are not, and this matters. Variance is the squared difference <b>from the mean</b>. Ah, but I don't know the true mean. I had 
-            to estimate it from the data too, and some of these estimates are not all that great.
+            Mostly, they are not, and this matters. Variance is the squared difference <b>from the mean</b>. Usually I don't know the true mean and have to estimate it from the data too. Some of these estimates are not all that great.
         </p>
 
         <p>
-            Consider a sample that happens to mostly contain points falling to the left of the true mean of 0. Now the sample mean will be to the left of the 
-            true mean too, and the distance from each point to the estimated mean will be smaller than the distance to the the true mean.
-            You will likely find an example of this in the samples above. If not, generate a few more samples. Note how the sample mean sort of follows the data around, thereby reducing those squared distances, resulting in a smaller variance estimate with the sample mean than I would get had I used the true mean.
+            Find a sample that has more points to the left of the true mean of 0. Where is the estimated mean? To the left of the true mean of 0 too! This is a problem because the distance from each point to the estimated mean is smaller than the distance to the true mean. The same problem occurs for any samples that are skewed to the right of the true mean.
         </p>
 
         <p>
-            Dividing the sum of squared deviations by <Equation>n - 1</Equation> rather than <Equation>n</Equation> accounts for this underestimation. Sometimes this is called Bessel's correction. 
+            The estimated mean follows the data around, reducing all of those squared distances, resulting in an underestimation of the spread. Had I know the true mean, this problem would not have occurred. Estimating two things at once from the same data is what gets us into trouble.
+        </p>
+
+        <p>
+            Dividing the sum of squared deviations from the mean by <Equation>n - 1</Equation> instead of <Equation>n</Equation> accounts for this underestimation by making the variance estimate larger<note>Correcting the <Equation>n</Equation> to <Equation>n - 1</Equation> is called Bessel's correction, named after the German astronomer and mathematician Friedrich Bessel.</note>
         </p>
 
         <h2>Deriving n-1</h2>
 
         <p>
-            Hopefully the intuition is clear by now. But even though I may have convinced you there is an underestimation problem, you may still be wondering why the correction is exactly <Equation>n - 1</Equation> and not something else altogether.
+            I trust that at this point I have convinced you of the underestimation problem when dividing by <Equation>n</Equation>. You may of course still be wondering why the correction is <Equation>n - 1</Equation> and not something else.
         </p>
 
         <p>
             Packed into a formula, variance is the expected value of the squared distance from the mean.
         </p>
 
-        <p>
-            <Equation class="indent">\text{Var}(X) = \text{E}[(X - \text{E}[X])^2]</Equation>
-        </p>
+        <Equation class="indent">\text{Var}(X) = \text{E}[(X - \text{E}[X])^2]</Equation>
 
         <p>
             I want to show 
             mathematically where <Equation>n - 1</Equation> makes an appearance when estimating this expected value, starting with the sum of squared deviations from the mean.<note>This is probably the moment to mention that the data points here are independent and identically distributed.</note> You see I am estimating two things using the same data.
         </p>
 
-        <p>
-            <Equation class="indent">
-                \begin{aligned}
-                \text{SSD}(X) &= \Sigma_i (X_i - m)^2 \\
-                            m &= \frac{1}{n}\Sigma_i X_i
-                \end{aligned}
-            </Equation>
-        </p>
+        <Equation class="indent">
+            \begin{aligned}
+            \operatorname{SSD}(X) &= \Sigma_i (X_i - m)^2 \\
+                        m &= \frac{1}{n}\Sigma_i X_i
+            \end{aligned}
+        </Equation>
 
         <p>
             Take its expected value, and simplify.
         </p>
 
-        <p>
-            <Equation class="indent">
+        <Equation class="indent">
             \begin{aligned}
                 \text{E}\left[\Sigma_i (X_i - m)^2\right] &= \text{E}\left[\Sigma_i X_i^2 - \Sigma_i 2m X_i + \Sigma_i m^2\right] &&\text{expand} \\ 
                                                           &= \text{E}\left[\Sigma_i X_i^2 - 2 n m^2 + n m^2\right] &&\text{because}\,\Sigma_i X_i = nm\\
                                                           &= \text{E}\left[\Sigma_i X_i^2 - n m^2\right] \\
                                                           &= n \text{E}\left[X^2\right] - n \text{E}\left[m^2\right]
             \end{aligned}
-            </Equation>
-        </p>
+        </Equation>
 
         <p>
             Why does <Equation>m^2</Equation> need to stay in brackets? Because <Equation>m</Equation> is a random variable! 
@@ -156,62 +144,52 @@
             make apparent what this implies.
         </p>
 
-        <p>
-            <Equation class="indent">
+        <Equation class="indent">
             \begin{aligned}
                 \text{Var}(m) &= \text{E}[(m - \text{E}[m])^2] && \text{definition of variance} \\
                               &= \text{E}[m^2] - \text{E}[m]^2 \\
                 \text{E}[m^2] &= \text{Var}(m) + \text{E}[m]^2 && \text{rearrange} \\
             \end{aligned}
-            </Equation>
-        </p>
+        </Equation>
 
         <p>
             Therefore, the estimated mean itself has variance. We actually want to express everything in terms of <Equation>X</Equation>, so do that next.
         </p>
 
-        <p>
-            <Equation class="indent">
+        <Equation class="indent">
             \begin{aligned}
                 \text{E}[m^2] &= \text{Var}(m) + \text{E}[m]^2 \\
                               &= \text{Var}(\frac{1}{n}\Sigma_i X_i) + \text{E}[\frac{1}{n}\Sigma_i X_i]^2 && \text{because}\, m = \frac{1}{n}\Sigma_i X_i \\
                               &= \frac{1}{n^2}\text{Var}(\Sigma_i X_i) + \frac{1}{n}\text{E}[\Sigma_i X_i]^2 \\
                               &= \frac{1}{n}\text{Var}(X) + \text{E}[X]^2 && \text{linearity}
             \end{aligned}
-            </Equation>
-        </p>
+        </Equation>
 
         <p>
             That takes care of <Equation>\text{E}\left[m^2\right]</Equation>, but the sum of squared deviations had another term <Equation>\text{E}[X^2]</Equation>. Again, express it in terms its variance.
         </p>
 
-        <p>
-            <Equation class="indent">\text{E}[X^2] = \text{Var}(X) + \text{E}[X]^2</Equation>
-        </p>
+        <Equation class="indent">\text{E}[X^2] = \text{Var}(X) + \text{E}[X]^2</Equation>
 
         <p>
             Let's combine everything we have figured out.
         </p>
 
-        <p>
-            <Equation class="indent">
+        <Equation class="indent">
             \begin{aligned}
-                E\left[SSD(X) \right] &= n \text{E}\left[X^2\right] - n \text{E}\left[m^2\right] \\
+                \text{E}\left[\operatorname{SSD}(X) \right] &= n \text{E}\left[X^2\right] - n \text{E}\left[m^2\right] \\
                  &= n \left(\text{Var}(X) + \text{E}[X]^2\right) - n (\frac{1}{n}\text{Var}(X) + \text{E}[X]^2) \\
                                                                         &= n \text{Var}(X) +  n \text{E}[X]^2 - n \frac{1}{n}\text{Var}(X) - n \text{E}[X]^2 \\
                                                                         &= (n - 1) \text{Var}(X)
             \end{aligned}
-            </Equation>
-        </p>
+        </Equation>
 
         <p>
             At last, Pandas' <Equation>n-1</Equation> appears! If we want <Equation>\text{Var}(X)</Equation> in expectation, divide the
             sum of squared deviations from the mean by <Equation>n-1</Equation>.
         </p>
 
-        <p>
-            <Equation class="indent">\text{Var}(X) = \frac{1}{n - 1} \Sigma_i (X_i - \frac{1}{n}\Sigma_i X_i)^2</Equation>
-        </p>
+        <Equation class="indent">\text{Var}(X) = \frac{1}{n - 1} \Sigma_i (X_i - \frac{1}{n}\Sigma_i X_i)^2</Equation>
 
         <p>
             So what's NumPy up to? Well, say that your <Equation>X_i</Equation>'s aren't just a sample, but it's all there is. Now
@@ -219,25 +197,23 @@
             divide by <Equation>n</Equation>.
         </p>
 
+        <p>
+            And of course, NumPy is a serious library that has been around forever. By doing <code>np.var(data, ddof=1)</code>, where <code>ddof</code> 
+            means delta degrees of freedom, you're going to get Pandas' answer too. It really just is an unfortunate default setting.
+        </p>
+
         <h2>Degrees of freedom</h2>
 
         <p>
-            Consider again how the mean is defined. If I tell you the sample size is 2, the 
+            Consider again how the mean is defined. If I tell you the sample size is 2, its 
             mean is 5, and one value is 0, what do you know about the remaining value?
         </p>
 
-        <p>
-            <Equation class="indent">\frac{0 + x}{2} = 5</Equation>
-        </p>
+        <Equation class="indent">\frac{0 + x}{2} = 5</Equation>
 
         <p>
             The mean imposes a constraint that dictates that <Equation>x = 10</Equation>. There is no room or <i>freedom</i> for it to be anything else. You only 
             need <Equation>n - 1</Equation> values and the last value follows.
-        </p>
-
-        <p>
-            And of course, NumPy is a serious library that has been around forever. By doing <code>np.var(data, ddof=1)</code>, where <code>ddof</code> 
-            means delta degrees of freedom, you're going to get Pandas' answer too. It really just is an unfortunate default setting.
         </p>
     </Article>
 </template>
