@@ -10,13 +10,13 @@
         </p>
 
         <p>
-            Why do "statisticians divide by n-1"? It is actually quite intuitive.
+            You have probably heard that <i>statisticians divide by n-1</i>, now let's explore why.
         </p>
 
         <h2>A tale of two estimated variances</h2>
 
         <p>
-            Variance measures how spread out a distribution is. Take each data point, finds its distance from the mean, and square it. Now sum it all up, and you have the sum of squared deviations:
+            Variance measures how spread out a distribution is. Take each data point, find its distance from the mean, and square it. Now sum it all up, and you have the sum of squared deviations:
         </p>
         
         <p>
