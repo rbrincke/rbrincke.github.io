@@ -9,34 +9,42 @@ defineProps<{
 </script>
 
 <template>
-  <div>
+  <article class="article-header">
     <h5 class="title">
       <a :href="link">{{ title }}</a>
     </h5>
 
-    <div class="meta">
-      <time :datetime="date">{{ date }}</time>
-    </div>
-
     <p class="summary">{{ summary }}</p>
 
-    <div class="row footer">
-      <div class="col"><a :href="link">Read More</a></div>
-      <div class="col text-end">
-        <font-awesome-icon :icon="['fas', 'tags']" /> {{ tags.join(', ') }}
-      </div>
+    <div class="footer">
+      <time :datetime="date">{{ date }}</time>
+      <span class="tag-list">
+        <font-awesome-icon :icon="['fas', 'tags']" />
+        {{ tags.join(', ') }}
+      </span>
+      <RouterLink :to="link" class="read-link">Read article <span aria-hidden="true">→</span></RouterLink>
     </div>
-  </div>
+  </article>
 </template>
 
-<style lang="scss" scopes>
+<style lang="scss" scoped>
+  .article-header {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 0 1.35rem;
+  }
+
   .title {
-    font-weight: bold;
-    margin-bottom: 0;
+    margin: 0 0 0.35rem;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    font-weight: 700;
   }
 
   .title a {
-    color: #222;
+    color: #1d1d1f;
     text-decoration: none;
   }
 
@@ -44,27 +52,44 @@ defineProps<{
     color: #2d96bd;
   }
 
-  .meta {
-    font-size: 0.875rem;
-    color: #a9a9b3;
-  }
-
   .summary {
-    margin-top: 0.4rem;
-    margin-bottom: 0.4rem;
-    color: #a9a9b3;
+    max-width: 680px;
+    margin: 0 0 0.9rem;
+    color: #777781;
+    line-height: 1.55;
   }
 
   .footer {
-    font-size: 0.875rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: center;
+    margin-top: auto;
+    color: #777781;
+    font-size: 0.78rem;
   }
 
-  *:is(.footer, .meta) a {
+  .tag-list {
+    white-space: nowrap;
+  }
+
+  .read-link {
+    color: #1d1d1f;
+    font-weight: 600;
     text-decoration: none;
-    color: #2d96bd;
   }
 
-  *:is(.footer, .meta) a:hover {
+  .read-link:hover {
     color: #ef3982;
+  }
+
+  @media (max-width: 575px) {
+    .footer {
+      grid-template-columns: 1fr auto;
+    }
+
+    .tag-list {
+      display: none;
+    }
   }
 </style>

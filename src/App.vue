@@ -3,16 +3,17 @@
 
 <template>
     <div class="app-container">
-        <nav class="navbar navbar-light header">
-            <a class="navbar-brand" href="/">
-                <font-awesome-icon :icon="['fas', 'house']" class="big-icon" />
-            </a>
-            <a href="/about">
-                <font-awesome-icon :icon="['fas', 'address-card']" class="big-icon" />
-            </a>
-        </nav>
+        <header class="site-header">
+            <nav class="header-inner" aria-label="Primary navigation">
+                <RouterLink class="brand" to="/">Robert ten Brincke</RouterLink>
+                <div class="header-links">
+                    <RouterLink to="/">Writing</RouterLink>
+                    <RouterLink to="/about">About</RouterLink>
+                </div>
+            </nav>
+        </header>
 
-        <div class="container-md space-bottom">
+        <div class="container-lg space-bottom">
             <div class="row justify-content-center">
                 <RouterView />
             </div>
@@ -21,31 +22,83 @@
 </template>
 
 <style lang="scss">
-    .header {
-        margin-bottom: 2rem;
-        margin-right: 1.25rem;
-        margin-left: 1.25rem;
+    :root {
+        font-family: 'Inter', sans-serif;
+        color: #1d1d1f;
+        background: #fff;
     }
 
-    .app-container big-icon {
-        font-size: 25px;
+    body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        color: #1d1d1f;
+        background: #fff;
     }
 
-    .article {
-        border-bottom-width: 1px;
-        border-bottom-style: dashed;
-        border-bottom-color: rgb(240, 240, 240);
-        padding-top: 1rem;
-        padding-bottom: 0.8rem;
+    .site-header {
+        height: 88px;
+        margin-bottom: 2.5rem;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .header-inner {
+        height: 100%;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .header-inner .brand {
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    .header-links {
+        display: flex;
+        gap: 28px;
+        align-items: center;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .header-inner a {
+        color: #1d1d1f;
+        text-decoration: none;
+    }
+
+    .header-inner a:hover,
+    .header-inner a.router-link-active {
+        color: #2d96bd;
     }
 
     .space-bottom {
-        margin-bottom: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    @media (max-width: 575px) {
+        .site-header {
+            height: 72px;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-inner {
+            padding: 0 20px;
+        }
+
+        .header-links {
+            gap: 18px;
+        }
     }
 
     .app-container h2 {
         font-weight: bold !important;
-        font-size: 1.2rem !important;
+        font-size: 1.55rem !important;
+        letter-spacing: -0.02em;
+        margin-top: 2.5rem;
     }
 
     .app-container h3 {

@@ -42,32 +42,42 @@
 
         <p>
             I will draw fifteen samples of ten points each. Each row is a sample, each draw is a blue dot, and the mean is a pink bar.
-            Next to each sample, I show the variance estimate from NumPy and Pandas. Whichever estimate is closest to the true variance of 1 is underlined. 
+            Next to each sample, I show the variance estimate from NumPy and Pandas. Whichever estimate is closest to the true variance of 1 is highlighted.
             At the bottom, I show how often a method was closer.
         </p>
 
-        <p>
-            Click <code @click="generateNext()" class="code-link">next sample</code> a few times. Which method wins?
-        </p>
+        <p class="experiment-question">Which method wins?</p>
 
         <div ref="parent" class="sample-container">
             <div class="sample-row">
-                <div class="sample-plot"></div>
-                <div class="sample-number" style="font-weight: bold;">NumPy</div>
-                <div class="sample-number" style="font-weight: bold;">Pandas</div>
+                <div class="sample-plot sample-heading">Sample</div>
+                <div class="sample-number sample-heading">NumPy</div>
+                <div class="sample-number sample-heading">Pandas</div>
             </div>
             <div class="sample-row sample-row-hv" v-for="s, idx in samples" :key="idx">
                 <div class="sample-plot">
-                    <SamplesPlot :width="(parent?.clientWidth ?? 500) - 128" :key="key + '-' + idx" :values="s" :domain="bounds" :disable-labels="idx !== (samples.length - 1)" />
+                    <SamplesPlot :width="Math.max(180, (parent?.clientWidth ?? 500) - 164)" :key="key + '-' + idx" :values="s" :domain="bounds" :disable-labels="true" />
                 </div>
-                <div class="sample-number" :style="[variance0Better[idx] ? { 'text-decoration-line': 'underline', 'text-decoration-color': '#ef3982', 'text-underline-offset' : '2px' } : {}]">{{ round(variance0(s)) }}</div>
-                <div class="sample-number" :style="[variance1Better[idx] ? { 'text-decoration-line': 'underline', 'text-decoration-color': '#ef3982', 'text-underline-offset' : '2px' } : {}]">{{ round(variance1(s)) }}</div>
+                <div class="sample-number" :class="{ winner: variance0Better[idx] }">{{ round(variance0(s)) }}</div>
+                <div class="sample-number" :class="{ winner: variance1Better[idx] }">{{ round(variance1(s)) }}</div>
             </div>
-            <div class="sample-row">
-                <div class="sample-plot"></div>
-                <div class="sample-number" style="font-weight: bold;">{{ round(100 * variance0Rate / samples.length, 1) }}%</div>
-                <div class="sample-number" style="font-weight: bold;">{{ round(100 * variance1Rate / samples.length, 1) }}%</div>
+            <div class="sample-row sample-summary">
+                <div class="sample-plot plot-axis">
+                    <span>{{ round(bounds.left, 1) }}</span>
+                    <span>-2</span>
+                    <span>0</span>
+                    <span>2</span>
+                    <span>{{ round(bounds.right, 1) }}</span>
+                </div>
+                <div class="sample-number">{{ round(100 * variance0Rate / samples.length, 1) }}%</div>
+                <div class="sample-number">{{ round(100 * variance1Rate / samples.length, 1) }}%</div>
             </div>
+        </div>
+
+        <div class="sample-footer">
+            <button type="button" class="next-sample" @click="generateNext()">
+                Generate next samples <span aria-hidden="true">→</span>
+            </button>
         </div>
 
         <p>
@@ -271,14 +281,7 @@ function variance1(values: number[]) {
 
 const samples = ref(makeSample());
 const bounds = computed(() => {
-    const actual = samples.value.reduce((acc, curr) => { 
-        return { left: Math.min(acc.left, Math.min(...curr)), right: Math.max(acc.right, Math.max(...curr)) }
-    }, { left: 0, right: 0 });
-
-    const symmetric = Math.max(Math.abs(actual.left), Math.abs(actual.right));
-    const rounded = round(symmetric, 1);
-
-    return { left: -rounded, right: rounded };
+    return { left: -4, right: 4 };
 })
 
 function makeSample() {
@@ -314,20 +317,25 @@ function generateNext() {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: 0.5rem;
-    margin-bottom: 1.5rem;
+    margin: 0;
+    overflow: hidden;
+}
+
+.experiment-question {
+    margin: 0 0 0.5rem;
 }
 
 .sample-row {
     display: grid;
-    grid-template-columns: 1fr min-content min-content;
+    grid-template-columns: minmax(180px, 1fr) 82px 82px;
     align-items: center;
-    padding: 4px 0;
+    min-height: 34px;
+    padding: 2px 0;
     width: 100%;
 }
 
 .sample-row-hv:hover {
-    background-color: #f8f8f8;
+    background-color: #f7fafb;
 }
 
 .sample-plot {
@@ -335,10 +343,114 @@ function generateNext() {
 }
 
 .sample-number {
-    font-size: 0.8rem;
+    color: #777781;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
     text-align: right;
-    min-width: 4rem;
-    padding-right: 0.5rem;
+    padding-right: 0.25rem;
+}
+
+.sample-number.winner {
+    color: #cf2f72;
+    font-weight: 700;
+}
+
+.sample-heading {
+    color: #777781;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.sample-row:first-child {
+    min-height: 36px;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.sample-summary {
+    min-height: 48px;
+    margin-top: 2px;
+    border-top: 1px solid #e7e7e7;
+    color: #777781;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+}
+
+.sample-summary .sample-number {
+    color: #1d1d1f;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.plot-axis {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+    padding: 0 20px;
+    color: #777781;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.plot-axis span {
+    text-align: center;
+}
+
+.plot-axis span:nth-child(1) {
+    text-align: left;
+}
+
+.plot-axis span:nth-child(5) {
+    text-align: right;
+}
+
+.sample-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.sample-footer p {
+    margin: 0;
+    color: #777781;
+    font-size: 0.875rem;
+}
+
+.next-sample {
+    padding: 0.35rem 0.15rem 0.35rem 0.5rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #397d96;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.next-sample:hover {
+    color: #ef3982;
+}
+
+.next-sample:focus-visible {
+    outline: 2px solid rgb(45 150 189 / 30%);
+    outline-offset: 5px;
+}
+
+@media (max-width: 575px) {
+    .sample-row {
+        grid-template-columns: minmax(120px, 1fr) 64px 64px;
+    }
+
+    .sample-footer {
+        justify-content: flex-end;
+    }
 }
 
 .code-link:hover {

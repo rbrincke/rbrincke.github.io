@@ -35,11 +35,13 @@ const wins = computed(() => props.row.reduce((acc, currentRow) => acc + props.co
 
 <style lang="scss" scoped>
     .dice-table td {
-        width: 2rem;
-        height: 2rem;
+        width: 2.25rem;
+        height: 2.25rem;
         padding: 0.25rem;
         text-align: center;
         vertical-align: middle;
+        font-size: 0.875rem;
+        font-variant-numeric: tabular-nums;
     }
 
     caption {
@@ -55,7 +57,9 @@ const wins = computed(() => props.row.reduce((acc, currentRow) => acc + props.co
     .dice-table th {
         text-align: center;
         color: #fff;
-        width: 2rem;
+        width: 2.25rem;
+        font-size: 0.875rem;
+        font-weight: 600;
     }
 
     .dice-table th[scope=col] {
