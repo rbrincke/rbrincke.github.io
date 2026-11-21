@@ -115,7 +115,7 @@
 
         <p>
             I want to show 
-            mathematically where <Equation>n - 1</Equation> makes an appearance when estimating this expected value, starting with the sum of squared deviations from the mean.<note>This is probably the moment to mention that the data points here are independent and identically distributed.</note> You see I am estimating two things using the same data.
+            mathematically where <Equation>n - 1</Equation> makes an appearance when estimating this expected value, starting with the sum of squared deviations from the mean.<note>This is probably the moment to mention that the data points here are independent and identically distributed.</note> The mean is estimated using the same data.
         </p>
 
         <Equation class="indent">
@@ -139,9 +139,12 @@
         </Equation>
 
         <p>
-            Why does <Equation>m^2</Equation> need to stay in brackets? Because <Equation>m</Equation> is a random variable! 
-            You figured that out earlier when the pink bars were all over the place. Express this in terms of mean and variance to
-            make apparent what this implies.
+            Why does <Equation>m^2</Equation> need to stay in brackets and do we have to take its expected value? Because <Equation>m</Equation> is a random variable! 
+            You saw this earlier when the pink bars were all over the place. The estimated mean has variance of its own.
+        </p>
+
+        <p>
+            Express <Equation>\text{E}[m^2]</Equation> in terms of the variance and expected value of <Equation>m</Equation>.
         </p>
 
         <Equation class="indent">
@@ -153,7 +156,7 @@
         </Equation>
 
         <p>
-            Therefore, the estimated mean itself has variance. We actually want to express everything in terms of <Equation>X</Equation>, so do that next.
+            Now express everything in terms of <Equation>X</Equation>.
         </p>
 
         <Equation class="indent">
@@ -172,7 +175,7 @@
         <Equation class="indent">\text{E}[X^2] = \text{Var}(X) + \text{E}[X]^2</Equation>
 
         <p>
-            Let's combine everything we have figured out.
+            Both terms have an expression that only uses the mean and variance of <Equation>X</Equation>. Simplify it.
         </p>
 
         <Equation class="indent">
@@ -192,7 +195,7 @@
         <Equation class="indent">\text{Var}(X) = \frac{1}{n - 1} \Sigma_i (X_i - \frac{1}{n}\Sigma_i X_i)^2</Equation>
 
         <p>
-            So what's NumPy up to? Well, say that your <Equation>X_i</Equation>'s aren't just a sample, but it's all there is. Now
+            So what's NumPy up to? Well, say that your <Equation>X_i</Equation>'s aren't just a sample, but it's all there is and there is no further data to collect. Now
             the estimated mean is the true mean, simply because you have all the values: the mean of the entire population. In that case, 
             divide by <Equation>n</Equation>.
         </p>

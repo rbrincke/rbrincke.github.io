@@ -86,6 +86,11 @@
         margin-bottom: 4rem;
     }
 
+    .app-container .lead {
+        font-size: 1.25rem;
+        line-height: 1.55;
+    }
+
     @media (max-width: 575px) {
         .site-header {
             height: 72px;
@@ -102,6 +107,10 @@
 
         .brand-logo {
             width: 178px;
+        }
+
+        .app-container .lead {
+            font-size: 1.15rem;
         }
     }
 

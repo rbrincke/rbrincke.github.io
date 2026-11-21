@@ -1,9 +1,7 @@
 <template>
     <main class="about-page">
-        <h1 class="title">About</h1>
-
         <div class="about-content">
-            <p>
+            <p class="lead">
                 You've stumbled on a page that veers somewhere between blog and notebook.
             </p>
 
@@ -22,16 +20,9 @@
         margin: 0 auto;
     }
 
-    .title {
-        margin: 0 0 1.75rem;
-        font-size: clamp(2.25rem, 5vw, 3.5rem);
-        line-height: 1.06;
-        letter-spacing: -0.055em;
-        font-weight: 700;
-    }
-
     .about-content {
         max-width: 680px;
+        margin: 0 auto;
         font-size: 1.075rem;
         line-height: 1.72;
     }
@@ -43,10 +34,6 @@
     @media (max-width: 575px) {
         .about-page {
             width: calc(100% - 40px);
-        }
-
-        .title {
-            font-size: 2.35rem;
         }
 
         .about-content {
