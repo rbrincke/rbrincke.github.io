@@ -1,41 +1,53 @@
 <template>
     <Article :article="article">
         <p>
-            Like everyone else these days, you'd break out Python to calculate things. Say you're curious about a data set's variance and use NumPy's <code>np.var(data)</code>.
-            A moment later you try Pandas' <code>pd.Series(data).var()</code> and you get a different answer.
-            What gives?
+            Did you know that NumPy's <code>np.var(data)</code> and Pandas' <code>pd.Series(data).var()</code> give different answers? 
         </p>
 
         <p>
-            It turns out that NumPy's default calculates the population variance, whereas Pandas, arguably more helpfully, calculates the sample variance.
+            Both calculate the variance, a measure of how spread out a distribution is, and both are correct too. NumPy's default calculates 
+            the population variance, whereas Pandas, arguably more helpfully, calculates the sample variance.
         </p>
 
         <p>
-            The justification that I've heard more than once is a hand-wavy "statisticians divide by n-1". I think the actual explanation is actually quite intuitive.
+            Why do "statisticians divide by n-1"? It is actually quite intuitive.
         </p>
 
         <h2>A tale of two estimated variances</h2>
 
         <p>
-            Variance measures how spread out a distribution is. It takes each data point, finds its distance from the mean, and squares it. Sum it all up, and we have the sum of squared deviations. But this sum grows with the number of data points. To fix that, we have to choose what to divide it by, and this is where NumPy and Pandas choose differently.
+            Variance measures how spread out a distribution is. Take each data point, finds its distance from the mean, and square it. Now sum it all up, and you have the sum of squared deviations:
+        </p>
+        
+        <p>
+            <Equation class="indent">
+                \begin{aligned}
+                \text{SSD}(X) &= \Sigma_i (X_i - m)^2
+                \end{aligned}
+            </Equation>
         </p>
 
         <p>
-            First, I'll try to convince you that Pandas' estimate is often more accurate.
+            This sum grows with the number of data points, making it very awkward to compare between datasets unless they are of the same size. A remedy is to divide it by something, and this is where NumPy and Pandas choose differently: NumPy divides by <Equation>n</Equation>, whereas Pandas divides by <Equation>n-1</Equation>.
         </p>
 
         <p>
-            I'll randomly sample from a standard normal distribution, drawing fifteen samples of ten points each, mostly because that fits on my screen. Draws are shown in blue, the mean is pink.
+            I will try to convince you that Pandas' estimate of variance is usually more accurate for the data sets you are likely to work with.
         </p>
 
         <p>
-            Now, the distribution I'm sampling from has a mean of 0 and a variance of 1: you already know the correct estimate is 1. The estimated 
-            variance for each method is shown to the right of each figure, and the estimate closest to the true variance is underlined. The percentages at the bottom show how often each method wins.
+            Let me randomly sample from a standard normal distribution. A standard normal distribution has a mean of 0 and a variance of 1, so you know 
+            the correct estimate is 1.
         </p>
 
         <p>
-            Click <code @click="generateNext()" class="code-link">next sample</code> a few times. Which
-            estimate comes closer to the known true variance of 1?
+            I will draw fifteen samples of ten points each. Each row is a sample, each draw is a blue dot, and the mean is a pink bar.
+            Next to each sample, I show the variance estimate from NumPy and Pandas. Whichever estimate is closest to the true variance of 1 is underlined. 
+            At the bottom, I show how often a method was closer.
+        </p>
+
+        <p>
+            Click <code @click="generateNext()" class="code-link">next sample</code> a few times. Which method wins?
         </p>
 
         <div ref="parent" class="sample-container">
