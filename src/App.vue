@@ -5,7 +5,9 @@
     <div class="app-container">
         <header class="site-header">
             <nav class="header-inner" aria-label="Primary navigation">
-                <RouterLink class="brand" to="/">Robert ten Brincke</RouterLink>
+                <RouterLink class="brand" to="/" aria-label="TEN BRINCKE home">
+                    <img class="brand-logo" src="/10-brincke.svg" alt="TEN BRINCKE">
+                </RouterLink>
                 <div class="header-links">
                     <RouterLink to="/">Writing</RouterLink>
                     <RouterLink to="/about">About</RouterLink>
@@ -52,9 +54,14 @@
     }
 
     .header-inner .brand {
-        font-size: 1.05rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+    }
+
+    .brand-logo {
+        display: block;
+        width: 204px;
+        height: auto;
     }
 
     .header-links {
@@ -91,6 +98,10 @@
 
         .header-links {
             gap: 18px;
+        }
+
+        .brand-logo {
+            width: 178px;
         }
     }
 
