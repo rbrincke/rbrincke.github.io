@@ -6,7 +6,7 @@
         <header class="site-header">
             <nav class="header-inner" aria-label="Primary navigation">
                 <RouterLink class="brand" to="/" aria-label="TEN BRINCKE home">
-                    <img class="brand-logo" src="/10-brincke.svg" alt="TEN BRINCKE">
+                    <img class="brand-logo" src="/logo.svg" alt="TEN BRINCKE">
                 </RouterLink>
                 <div class="header-links">
                     <RouterLink to="/">Writing</RouterLink>
@@ -60,7 +60,7 @@
 
     .brand-logo {
         display: block;
-        width: 204px;
+        width: 128px;
         height: auto;
     }
 
@@ -106,7 +106,7 @@
         }
 
         .brand-logo {
-            width: 178px;
+            width: 111px;
         }
 
         .app-container .lead {
